@@ -2,8 +2,8 @@ package preved.medved;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Application main class.
@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 @Log4j2
 public class Application {
 
-    private Calculator calculator;
 
     public static Application INSTANCE;
 
@@ -20,7 +19,7 @@ public class Application {
         final CommandLineArguments arguments = CommandLineArguments.builder().build();
         final JCommander commander = JCommander.newBuilder()
                 .addObject(arguments)
-                .programName("myapp")
+                .programName("Fake data generator")
                 .build();
 
         try {
@@ -44,37 +43,8 @@ public class Application {
     public void run(final CommandLineArguments arguments) {
         log.info("Started application");
 
-        if (calculator == null) {
-            calculator = createCalculator();
-        }
-
-        if (StringUtils.equalsIgnoreCase("add", arguments.getOperation())) {
-            final int result = calculator.add(arguments.getX(), arguments.getY());
-            calculator.save(result);
-        } else if (StringUtils.equalsIgnoreCase("multiply", arguments.getOperation())) {
-            final int result = calculator.multiply(arguments.getX(), arguments.getY());
-            calculator.save(result);
-        }
+        new FakeDataGenerator(arguments).process();
 
         log.info("Exiting application...");
-    }
-
-    protected Calculator createCalculator() {
-        return new Calculator() {
-            @Override
-            public int add(int x, int y) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public int multiply(int x, int y) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public void save(int x) {
-                throw new UnsupportedOperationException();
-            }
-        };
     }
 }

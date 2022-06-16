@@ -1,9 +1,7 @@
 package preved.medved;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.beust.jcommander.Parameter;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,22 +12,30 @@ import lombok.Data;
 @Data
 public class CommandLineArguments {
     @Builder.Default
-    @Parameter
-    private List<String> parameters = new ArrayList<>();
+    @Parameter(names = { "--destination-folder", "-p" }, description = "Where put the files")
+    private String path = ".";
 
     @Builder.Default
-    @Parameter(names = { "--number1", "-x" }, description = "Input number 1")
-    private Integer x = 1;
+    @Parameter(names = { "--amount-files", "-n" }, description = "Amount of data files for generating")
+    private Integer amountFiles = 1;
 
     @Builder.Default
-    @Parameter(names = { "--number2", "-y" }, description = "Input number 2")
-    private Integer y = 1;
+    @Parameter(names = { "--file-size", "-s" }, description = "Minimum size of data file for generating")
+    private Integer sizeBytes = 1;
+    
+    @Parameter(names = "--book-faker", description = "Book faker'll be used")
+    private boolean books;
 
-    @Builder.Default
-    @Parameter(names = "--operation", description = "Math operation to perform")
-    private String operation = "add";
+    @Parameter(names = "--beer-faker", description = "Beer faker'll be used")
+    private boolean beers;
 
-    @Builder.Default
-    @Parameter(names = "--debug", description = "Debug mode")
-    private boolean debug = false;
+    @Parameter(names = "--cat-faker", description = "Cat faker'll be used")
+    private boolean cat;
+
+    @Parameter(names = "--dog-faker", description = "Dog faker'll be used")
+    private boolean dog;
+
+    @Parameter(names = "--finance-faker", description = "Finance faker'll be used")
+    private boolean finance;
+
 }
