@@ -15,14 +15,19 @@
                 <SizeBasedTriggeringPolicy size="10MB"/>
                 <TimeBasedTriggeringPolicy interval="1" />
             </Policies>
-            <DefaultRolloverStrategy max="2"/>
+            <DefaultRolloverStrategy max="20"/>
         </RollingFile>
     </Appenders>
 
     <Loggers>
+        <!-- Logger name="com.mypackage" level="DEBUG" />
+            <AppenderRef ref="MyAppender"/>
+        </Logger -->
+
+        <Logger name="preved.medved" level="DEBUG" />
         <Root level="INFO">
             <AppenderRef ref="Console"/>
-<!--            <AppenderRef ref="File"/>-->
+            <AppenderRef ref="File"/>
         </Root>
     </Loggers>
 </Configuration>
