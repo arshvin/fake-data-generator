@@ -20,8 +20,8 @@ public class CommandLineArguments {
     private Integer amountFiles = 1;
 
     @Builder.Default
-    @Parameter(names = { "--file-size", "-s" }, description = "Minimum size of data file for generating")
-    private Integer sizeBytes = 1;
+    @Parameter(names = { "--file-size", "-s" }, description = "Minimum size of data file for generating (in GiB)")
+    private Integer sizeGibiBytes = 1;
     
     @Parameter(names = "--book-faker", description = "Book faker'll be used")
     private boolean books;
