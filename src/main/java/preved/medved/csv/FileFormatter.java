@@ -25,95 +25,87 @@ import preved.medved.producers.Producer;
 @Log4j2
 public class FileFormatter {
 
-    private LinkedHashMap<Class<Producer>,Producer> fakerRegistry = new LinkedHashMap<>();
+  private LinkedHashMap<Class<Producer>, Producer> fakerRegistry = new LinkedHashMap<>();
 
-    @Getter
-    private ArrayList<String> headers = new ArrayList<>();
+  @Getter private ArrayList<String> headers = new ArrayList<>();
 
-    @Getter
-    private ArrayList<CellProcessor> cellProcessors = new ArrayList<>();
+  @Getter private ArrayList<CellProcessor> cellProcessors = new ArrayList<>();
+  private Faker fakerInstance = new Faker();
 
-    private void addFaker(Class faker) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (!fakerRegistry.keySet().contains(faker)) {
-            Class[] parameterType = { Faker.class };
-            Constructor<Producer> constructor = faker.getConstructor(parameterType);
-            Object[] obj = { new Faker() };
-            Producer instance = constructor.newInstance(obj);
+  private void addFaker(Class faker)
+      throws NoSuchMethodException, SecurityException, InstantiationException,
+          IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-            List<String> header = ((Header) instance).getHeader();
+    if (!fakerRegistry.keySet().contains(faker)) {
+      Class[] parameterType = {Faker.class};
+      Constructor<Producer> constructor = faker.getConstructor(parameterType);
+      Object[] obj = { fakerInstance};
+      Producer instance = constructor.newInstance(obj);
 
-      log.info("Adding column names: {}", Strings.join("|",header));
+      List<String> header = ((Header) instance).getHeader();
 
-            headers.addAll(header);
-            fakerRegistry.put(faker, instance);
-        }
+      log.info("Adding column names: {}", Strings.join("|", header));
 
+      headers.addAll(header);
+      fakerRegistry.put(faker, instance);
+    }
+  }
+
+  public FileFormatter addBeer()
+      throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+          IllegalAccessException {
+    addFaker(BeerFaker.class);
+    return this;
+  }
+
+  public FileFormatter addBook()
+      throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+          IllegalAccessException {
+    addFaker(BookFaker.class);
+    return this;
+  }
+
+  public FileFormatter addCat()
+      throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+          IllegalAccessException {
+    addFaker(CatFaker.class);
+    return this;
+  }
+
+  public FileFormatter addDog()
+      throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+          IllegalAccessException {
+    addFaker(DogFaker.class);
+
+    return this;
+  }
+
+  public FileFormatter addFinance()
+      throws InvocationTargetException, NoSuchMethodException, InstantiationException,
+          IllegalAccessException {
+    addFaker(FinanceFaker.class);
+    return this;
+  }
+
+  public FileFormatter build() {
+    if (headers.size() == 0) {
+      throw new RuntimeException("Headers list should not be empty!");
+    }
+    headers.forEach((i) -> cellProcessors.add(new NotNull()));
+    return this;
+  }
+
+  public List<String> produceData() {
+    if (cellProcessors.size() == 0) {
+      throw new RuntimeException(
+          "Perhaps the execution of build() method in client code has been missed");
     }
 
-    public FileFormatter addBeer(){
-        try {
-            addFaker(BeerFaker.class);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
-    public FileFormatter addBook(){
-        try {
-            addFaker(BookFaker.class);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
-    public FileFormatter addCat(){
-        try {
-            addFaker(CatFaker.class);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
-    public FileFormatter addDog(){
-        try {
-            addFaker(DogFaker.class);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
-    public FileFormatter addFinance(){
-        try {
-            addFaker(FinanceFaker.class);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return this;
+    List<String> record = new ArrayList<>();
+    for (Producer item : fakerRegistry.values()) {
+      record.addAll(item.produceData());
     }
 
-    public FileFormatter build() {
-        if (headers.size() == 0 ){
-            throw new RuntimeException("Headers list should not be empty!");
-        }
-        headers.forEach((i) -> cellProcessors.add(new NotNull()));
-        return this;
-    }
-
-    public List<String> produceData() {
-        if (cellProcessors.size() == 0) {
-            throw new RuntimeException("Perhaps the execution of build() method in client code has been missed");
-        }
-
-        List<String> record = new ArrayList<>();
-        for (Producer item : fakerRegistry.values()) {
-            record.addAll(item.produceData());
-        }
-
-        return record;
-    }
+    return record;
+  }
 }

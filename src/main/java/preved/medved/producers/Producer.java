@@ -2,7 +2,6 @@ package preved.medved.producers;
 
 import java.util.List;
 
-public interface Producer {    
+public interface Producer {
     List<String> produceData();
 }
-
