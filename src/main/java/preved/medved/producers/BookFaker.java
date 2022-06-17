@@ -1,4 +1,4 @@
-package preved.medved.csv;
+package preved.medved.producers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.github.javafaker.Book;
 import com.github.javafaker.Faker;
 
-public class BookFaker implements CsvFaker {
+public class BookFaker implements Producer, Header {
     private Book book;
 
     public BookFaker(Faker faker) {
@@ -21,6 +21,15 @@ public class BookFaker implements CsvFaker {
                 book.genre());
 
         return items;
+    }
+
+    @Override
+    public List<String> getHeader() {
+        return Arrays.asList(
+                "book.author",
+                "book.title",
+                "book.publisher",
+                "book.genre");
     }
 
 }

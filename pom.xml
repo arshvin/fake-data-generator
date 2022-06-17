@@ -44,19 +44,20 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
 
         <maven.test.plugins.version>3.0.0-M6</maven.test.plugins.version>
 
         <lombok.version>1.18.24</lombok.version>
         <junit.version>5.8.2</junit.version>
-        <mockito.version>4.4.0</mockito.version>
-        <log4j2.version>2.17.1</log4j2.version>
+        <mockito.version>4.6.1</mockito.version>
+        <log4j2.version>2.17.2</log4j2.version>
         <faker.version>1.0.2</faker.version>
         <jcommander.version>1.82</jcommander.version>
         <guava.version>31.1-jre</guava.version>
         <supercsv.version>2.4.0</supercsv.version>
+        <common.io.version>2.11.0</common.io.version>
     </properties>
 
     <dependencies>
@@ -113,7 +114,7 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-
+<!-- Business dependencies-->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
@@ -124,6 +125,17 @@
             <groupId>net.sf.supercsv</groupId>
             <artifactId>super-csv</artifactId>
             <version>${supercsv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${common.io.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.tongfei</groupId>
+            <artifactId>progressbar</artifactId>
+            <version>0.9.3</version>
         </dependency>
     </dependencies>
 
