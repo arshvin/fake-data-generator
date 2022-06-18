@@ -5,31 +5,39 @@ import java.util.List;
 
 import com.github.javafaker.Book;
 import com.github.javafaker.Faker;
+import lombok.extern.log4j.Log4j2;
+import preved.medved.BackgroundFetcher;
 
-public class BookFaker implements Producer, Header {
-    private Book book;
+@Log4j2
+public class BookFaker extends BackgroundFetcher implements Producer, Header {
+  private Book book;
 
-    public BookFaker(Faker faker) {
-        book = faker.book();
+  public BookFaker(Faker faker) {
+    book = faker.book();
+
+    fetchTask =
+        () -> {
+          log.trace("Generating data from Runnable task");
+          queue.add(Arrays.asList(book.author(), book.title(), book.publisher(), book.genre()));
+        };
+
+    requestNewData();
+  }
+
+  public List<String> produceData() {
+    log.trace("Retrieving data");
+    List<String> items = null;
+    try {
+      items = retrieveData();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+    requestNewData();
+    return items;
+  }
 
-    public List<String> produceData() {
-        List<String> items = Arrays.asList(
-                book.author(),
-                book.title(),
-                book.publisher(),
-                book.genre());
-
-        return items;
-    }
-
-    @Override
-    public List<String> getHeader() {
-        return Arrays.asList(
-                "book.author",
-                "book.title",
-                "book.publisher",
-                "book.genre");
-    }
-
+  @Override
+  public List<String> getHeader() {
+    return Arrays.asList("book.author", "book.title", "book.publisher", "book.genre");
+  }
 }
