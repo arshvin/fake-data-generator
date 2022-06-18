@@ -2,34 +2,38 @@ package preved.medved.producers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.github.javafaker.Book;
 import com.github.javafaker.Faker;
+import lombok.extern.log4j.Log4j2;
+import preved.medved.BackgroundFetcher;
 
-public class BookFaker implements Producer, Header {
-    private Book book;
+@Log4j2
+public class BookFaker extends BackgroundFetcher implements Producer, Header {
+  private Book book;
 
-    public BookFaker(Faker faker) {
-        book = faker.book();
-    }
+  public BookFaker(Faker faker) {
+    book = faker.book();
 
-    public List<String> produceData() {
-        List<String> items = Arrays.asList(
-                book.author(),
-                book.title(),
-                book.publisher(),
-                book.genre());
+    fetchTask =
+        () -> {
+          log.trace("Generating data from Runnable task");
+          queue.add(Arrays.asList(book.author(), book.title(), book.publisher(), book.genre()));
+        };
 
-        return items;
-    }
+      IntStream.range(0,4).forEach((int i) -> {
+          requestNewData();
+      });
+  }
+
+  @Override
+  public List<String> getHeader() {
+    return Arrays.asList("book.author", "book.title", "book.publisher", "book.genre");
+  }
 
     @Override
-    public List<String> getHeader() {
-        return Arrays.asList(
-                "book.author",
-                "book.title",
-                "book.publisher",
-                "book.genre");
+    public void close() {
+        shutdown();
     }
-
 }

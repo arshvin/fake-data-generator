@@ -60,38 +60,37 @@ public class FakeDataGenerator {
     Long minSizeLimit = Long.valueOf(arguments.getSizeGiBiBytes()) * 1024 * 1024 * 1024;
     String minSizeLimitHuman = FileUtils.byteCountToDisplaySize(minSizeLimit).toString();
 
-      for (int i = 0; i < arguments.getAmountFiles(); i++) {
-        Long fileSizeCounter = Long.valueOf(0);
+    for (int i = 0; i < arguments.getAmountFiles(); i++) {
+      Long fileSizeCounter = Long.valueOf(0);
 
-        String filePath = getTargetFileName().toFile().toString();
-        log.info("Writing data to file: {}", filePath);
+      String filePath = getTargetFileName().toFile().toString();
+      log.info("Writing data to file: {}", filePath);
 
-        CsvListWriter targetFileWriter =
-            new CsvListWriter(new FileWriter(filePath), CsvPreference.STANDARD_PREFERENCE);
-        targetFileWriter.writeHeader(header);
+      CsvListWriter targetFileWriter =
+          new CsvListWriter(new FileWriter(filePath), CsvPreference.STANDARD_PREFERENCE);
+      targetFileWriter.writeHeader(header);
 
-        fileSizeCounter += Long.valueOf(Strings.join(",", header).length());
+      fileSizeCounter += Long.valueOf(Strings.join(",", header).length());
 
-        try (ProgressBar pb2 =
-            new ProgressBarBuilder()
-                .setStyle(ProgressBarStyle.COLORFUL_UNICODE_BLOCK)
-                .setUnit("Bytes", 1)
-                .setInitialMax(minSizeLimit)
-                .setTaskName("Fake data generation")
-                .showSpeed()
-                .build()) {
-          while (fileSizeCounter.compareTo(minSizeLimit) < 0) {
-            List<String> currentLine = fileFormatter.produceData();
-            targetFileWriter.write(currentLine, cellProcessor);
+      try (ProgressBar pb2 =
+          new ProgressBarBuilder()
+              .setStyle(ProgressBarStyle.COLORFUL_UNICODE_BLOCK)
+              .setUnit(getPbUnitName(), getPbUnitSize())
+              .setInitialMax(minSizeLimit)
+              .setTaskName("Fake data generation")
+              .showSpeed()
+              .build()) {
+        while (fileSizeCounter.compareTo(minSizeLimit) < 0) {
+          List<String> currentLine = fileFormatter.produceData();
+          targetFileWriter.write(currentLine, cellProcessor);
 
-            fileSizeCounter += Long.valueOf(Strings.join(",", currentLine).length());
-            pb2.stepTo(fileSizeCounter);
-          }
+          fileSizeCounter += Long.valueOf(Strings.join(",", currentLine).length());
+          pb2.stepTo(fileSizeCounter);
         }
+      }
 
-        targetFileWriter.close();
-        log.info("Closed file: {}", filePath);
-
+      targetFileWriter.close();
+      log.info("Closed file: {}", filePath);
     }
   }
 
@@ -100,5 +99,25 @@ public class FakeDataGenerator {
         new StringBuilder().append(UUID.randomUUID().toString()).append(".csv").toString();
     Path path = Paths.get(arguments.getPath(), basename);
     return path;
+  }
+
+  private String getPbUnitName(){
+    if (arguments.getSizeGiBiBytes() < 10){
+      return "KiBytes";
+    }
+    if (arguments.getSizeGiBiBytes() < 100){
+      return "MiBytes";
+    }
+    return "GiBytes";
+  }
+
+  private Long getPbUnitSize(){
+    if (arguments.getSizeGiBiBytes() < 10){
+      return Long.valueOf(1024);
+    }
+    if (arguments.getSizeGiBiBytes() < 100){
+      return Long.valueOf(1024*1024);
+    }
+    return Long.valueOf(1024*1024*1024);
   }
 }
