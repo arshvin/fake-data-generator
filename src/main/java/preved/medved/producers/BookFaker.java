@@ -24,18 +24,6 @@ public class BookFaker extends BackgroundFetcher implements Producer, Header {
     requestNewData();
   }
 
-  public List<String> produceData() {
-    log.trace("Retrieving data");
-    List<String> items = null;
-    try {
-      items = retrieveData();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    requestNewData();
-    return items;
-  }
-
   @Override
   public List<String> getHeader() {
     return Arrays.asList("book.author", "book.title", "book.publisher", "book.genre");
