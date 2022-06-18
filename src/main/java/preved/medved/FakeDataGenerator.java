@@ -14,7 +14,9 @@ import preved.medved.csv.FileFormatter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.FileSystem;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -96,7 +98,7 @@ public class FakeDataGenerator {
   private Path getTargetFileName() {
     String basename =
         new StringBuilder().append(UUID.randomUUID().toString()).append(".csv").toString();
-    Path path = Path.of(arguments.getPath(), basename);
+    Path path = Paths.get(arguments.getPath(), basename);
     return path;
   }
 }
