@@ -8,20 +8,20 @@ import java.util.concurrent.*;
 
 @Log4j2
 public class BackgroundFetcher {
-  private static ThreadPoolExecutor excecutor =
+  private static ThreadPoolExecutor executor =
       (ThreadPoolExecutor) Executors.newCachedThreadPool();
   protected Queue<List<String>> queue = new ConcurrentLinkedQueue<>();
   protected Runnable fetchTask;
 
   protected void requestNewData() {
     log.trace("Submitting the Runnable task");
-    excecutor.submit(fetchTask);
+    executor.submit(fetchTask);
   }
   ;
 
   protected List<String> retrieveData() throws InterruptedException {
     while (queue.isEmpty()) {
-      log.trace("Waiting data from the queue");
+      log.trace("Waiting data from the queue...");
     }
     log.trace("Getting data from the queue");
     return queue.poll();
@@ -38,4 +38,8 @@ public class BackgroundFetcher {
     requestNewData();
     return items;
   }
+
+  protected void shutdown(){
+    executor.shutdown();
+  };
 }

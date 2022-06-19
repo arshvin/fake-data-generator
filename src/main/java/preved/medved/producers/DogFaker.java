@@ -2,6 +2,7 @@ package preved.medved.producers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.github.javafaker.Dog;
 import com.github.javafaker.Faker;
@@ -30,7 +31,9 @@ public class DogFaker extends BackgroundFetcher implements Producer, Header {
                   dog.size()));
         };
 
-    requestNewData();
+      IntStream.range(0,3).forEach((int i) -> {
+          requestNewData();
+      });
   }
 
   @Override
@@ -45,4 +48,9 @@ public class DogFaker extends BackgroundFetcher implements Producer, Header {
         "dog.gender",
         "dog.size");
   }
+
+    @Override
+    public void close() {
+        shutdown();
+    }
 }

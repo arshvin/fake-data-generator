@@ -2,6 +2,7 @@ package preved.medved.producers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.github.javafaker.Book;
 import com.github.javafaker.Faker;
@@ -21,11 +22,18 @@ public class BookFaker extends BackgroundFetcher implements Producer, Header {
           queue.add(Arrays.asList(book.author(), book.title(), book.publisher(), book.genre()));
         };
 
-    requestNewData();
+      IntStream.range(0,4).forEach((int i) -> {
+          requestNewData();
+      });
   }
 
   @Override
   public List<String> getHeader() {
     return Arrays.asList("book.author", "book.title", "book.publisher", "book.genre");
   }
+
+    @Override
+    public void close() {
+        shutdown();
+    }
 }

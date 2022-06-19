@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.beust.jcommander.Strings;
 import lombok.extern.log4j.Log4j2;
@@ -108,4 +109,9 @@ public class FileFormatter {
 
     return record;
   }
+
+  public void close(){
+    fakerRegistry.values().forEach((Producer item) -> item.close());
+  };
+
 }

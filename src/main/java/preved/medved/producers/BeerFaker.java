@@ -2,6 +2,7 @@ package preved.medved.producers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.github.javafaker.Beer;
 import com.github.javafaker.Faker;
@@ -22,11 +23,20 @@ public class BeerFaker extends BackgroundFetcher implements Producer, Header {
               Arrays.asList(beer.name(), beer.style(), beer.hop(), beer.yeast(), beer.malt()));
         };
 
-    requestNewData();
+    IntStream.range(0, 3)
+        .forEach(
+            (int i) -> {
+              requestNewData();
+            });
   }
 
   @Override
   public List<String> getHeader() {
     return Arrays.asList("beer.name", "beer.style", "beer.hop", "beer.yeast", "beer.malt");
   }
+
+    @Override
+    public void close() {
+        shutdown();
+    }
 }
