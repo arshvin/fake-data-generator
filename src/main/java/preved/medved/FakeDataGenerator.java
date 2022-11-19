@@ -1,6 +1,13 @@
 package preved.medved;
 
 import com.beust.jcommander.Strings;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
 import lombok.extern.log4j.Log4j2;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
@@ -10,15 +17,6 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.prefs.CsvPreference;
 import preved.medved.csv.FileFormatter;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.FileSystem;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.UUID;
 
 @Log4j2
 public class FakeDataGenerator {
@@ -101,23 +99,23 @@ public class FakeDataGenerator {
     return path;
   }
 
-  private String getPbUnitName(){
-    if (arguments.getSizeGiBiBytes() < 10){
+  private String getPbUnitName() {
+    if (arguments.getSizeGiBiBytes() < 10) {
       return "KiBytes";
     }
-    if (arguments.getSizeGiBiBytes() < 100){
+    if (arguments.getSizeGiBiBytes() < 100) {
       return "MiBytes";
     }
     return "GiBytes";
   }
 
-  private Long getPbUnitSize(){
-    if (arguments.getSizeGiBiBytes() < 10){
+  private Long getPbUnitSize() {
+    if (arguments.getSizeGiBiBytes() < 10) {
       return Long.valueOf(1024);
     }
-    if (arguments.getSizeGiBiBytes() < 100){
-      return Long.valueOf(1024*1024);
+    if (arguments.getSizeGiBiBytes() < 100) {
+      return Long.valueOf(1024 * 1024);
     }
-    return Long.valueOf(1024*1024*1024);
+    return Long.valueOf(1024 * 1024 * 1024);
   }
 }

@@ -1,11 +1,10 @@
 package preved.medved.producers;
 
+import com.github.javafaker.Cat;
+import com.github.javafaker.Faker;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import com.github.javafaker.Cat;
-import com.github.javafaker.Faker;
 import lombok.extern.log4j.Log4j2;
 import preved.medved.BackgroundFetcher;
 
@@ -22,9 +21,11 @@ public class CatFaker extends BackgroundFetcher implements Producer, Header {
           queue.add(Arrays.asList(cat.name(), cat.breed(), cat.registry()));
         };
 
-      IntStream.range(0,2).forEach((int i) -> {
-          requestNewData();
-      });
+    IntStream.range(0, 2)
+        .forEach(
+            (int i) -> {
+              requestNewData();
+            });
   }
 
   @Override
@@ -32,8 +33,8 @@ public class CatFaker extends BackgroundFetcher implements Producer, Header {
     return Arrays.asList("cat.name", "cat.breed", "cat.registry");
   }
 
-    @Override
-    public void close() {
-        shutdown();
-    }
+  @Override
+  public void close() {
+    shutdown();
+  }
 }

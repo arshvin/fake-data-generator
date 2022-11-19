@@ -2,11 +2,9 @@ package preved.medved;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
-
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import lombok.extern.log4j.Log4j2;
 
 /** Application main class. */
 @Log4j2
