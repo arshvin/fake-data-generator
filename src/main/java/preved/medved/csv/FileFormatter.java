@@ -1,20 +1,16 @@
 package preved.medved.csv;
 
+import com.beust.jcommander.Strings;
+import com.github.javafaker.Faker;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Stream;
-
-import com.beust.jcommander.Strings;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-
-import com.github.javafaker.Faker;
-
-import lombok.Getter;
 import preved.medved.producers.BeerFaker;
 import preved.medved.producers.BookFaker;
 import preved.medved.producers.CatFaker;
@@ -40,7 +36,7 @@ public class FileFormatter {
     if (!fakerRegistry.keySet().contains(faker)) {
       Class[] parameterType = {Faker.class};
       Constructor<Producer> constructor = faker.getConstructor(parameterType);
-      Object[] obj = { fakerInstance};
+      Object[] obj = {fakerInstance};
       Producer instance = constructor.newInstance(obj);
 
       List<String> header = ((Header) instance).getHeader();
@@ -110,8 +106,8 @@ public class FileFormatter {
     return record;
   }
 
-  public void close(){
+  public void close() {
     fakerRegistry.values().forEach((Producer item) -> item.close());
-  };
-
+  }
+  ;
 }

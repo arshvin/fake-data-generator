@@ -1,11 +1,10 @@
 package preved.medved.producers;
 
+import com.github.javafaker.Book;
+import com.github.javafaker.Faker;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import com.github.javafaker.Book;
-import com.github.javafaker.Faker;
 import lombok.extern.log4j.Log4j2;
 import preved.medved.BackgroundFetcher;
 
@@ -22,9 +21,11 @@ public class BookFaker extends BackgroundFetcher implements Producer, Header {
           queue.add(Arrays.asList(book.author(), book.title(), book.publisher(), book.genre()));
         };
 
-      IntStream.range(0,4).forEach((int i) -> {
-          requestNewData();
-      });
+    IntStream.range(0, 4)
+        .forEach(
+            (int i) -> {
+              requestNewData();
+            });
   }
 
   @Override
@@ -32,8 +33,8 @@ public class BookFaker extends BackgroundFetcher implements Producer, Header {
     return Arrays.asList("book.author", "book.title", "book.publisher", "book.genre");
   }
 
-    @Override
-    public void close() {
-        shutdown();
-    }
+  @Override
+  public void close() {
+    shutdown();
+  }
 }

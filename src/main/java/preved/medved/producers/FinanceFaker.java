@@ -1,12 +1,10 @@
 package preved.medved.producers;
 
+import com.github.javafaker.Faker;
+import com.github.javafaker.Finance;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import com.github.javafaker.Finance;
-import com.github.javafaker.Faker;
 import lombok.extern.log4j.Log4j2;
 import preved.medved.BackgroundFetcher;
 
@@ -23,9 +21,11 @@ public class FinanceFaker extends BackgroundFetcher implements Producer, Header 
           queue.add(Arrays.asList(finance.bic(), finance.creditCard(), finance.iban()));
         };
 
-      IntStream.range(0,30).forEach((int i) -> {
-          requestNewData();
-      });
+    IntStream.range(0, 30)
+        .forEach(
+            (int i) -> {
+              requestNewData();
+            });
   }
 
   @Override
@@ -33,8 +33,8 @@ public class FinanceFaker extends BackgroundFetcher implements Producer, Header 
     return Arrays.asList("finance.bic", "finance.creaditCard", "finance.iban");
   }
 
-    @Override
-    public void close() {
-        shutdown();
-    }
+  @Override
+  public void close() {
+    shutdown();
+  }
 }

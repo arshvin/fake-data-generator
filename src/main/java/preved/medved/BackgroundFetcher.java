@@ -1,15 +1,13 @@
 package preved.medved;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.*;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class BackgroundFetcher {
-  private static ThreadPoolExecutor executor =
-      (ThreadPoolExecutor) Executors.newCachedThreadPool();
+  private static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
   protected Queue<List<String>> queue = new ConcurrentLinkedQueue<>();
   protected Runnable fetchTask;
 
@@ -25,7 +23,8 @@ public class BackgroundFetcher {
     }
     log.trace("Getting data from the queue");
     return queue.poll();
-  };
+  }
+  ;
 
   public List<String> produceData() {
     log.trace("Retrieving data");
@@ -39,7 +38,8 @@ public class BackgroundFetcher {
     return items;
   }
 
-  protected void shutdown(){
+  protected void shutdown() {
     executor.shutdown();
-  };
+  }
+  ;
 }
