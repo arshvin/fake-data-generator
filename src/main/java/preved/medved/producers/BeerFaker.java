@@ -3,16 +3,16 @@ package preved.medved.producers;
 import com.github.javafaker.Beer;
 import com.github.javafaker.Faker;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
 import preved.medved.BackgroundFetcher;
 
 @Log4j2
-public class BeerFaker extends BackgroundFetcher implements Producer, Header {
+public class BeerFaker extends BackgroundFetcher {
   private Beer beer;
 
   public BeerFaker(Faker faker) {
+    header = new String[] {"beer.name", "beer.style", "beer.hop", "beer.yeast", "beer.malt"};
     beer = faker.beer();
 
     fetchTask =
@@ -27,15 +27,5 @@ public class BeerFaker extends BackgroundFetcher implements Producer, Header {
             (int i) -> {
               requestNewData();
             });
-  }
-
-  @Override
-  public List<String> getHeader() {
-    return Arrays.asList("beer.name", "beer.style", "beer.hop", "beer.yeast", "beer.malt");
-  }
-
-  @Override
-  public void close() {
-    shutdown();
   }
 }
