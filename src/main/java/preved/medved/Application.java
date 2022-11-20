@@ -61,8 +61,12 @@ public class Application {
       }
     } catch (final ParameterException ex) {
       log.error("Error parsing arguments: {}", args, ex);
-      jc.usage();
-    } catch (IOException | ExecutionException | InterruptedException e) {
+      commander.usage();
+    } catch (IOException
+        | InvocationTargetException
+        | NoSuchMethodException
+        | InstantiationException
+        | IllegalAccessException e) {
       e.printStackTrace();
     }
     log.info("Exited application");
