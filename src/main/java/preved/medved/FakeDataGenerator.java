@@ -20,7 +20,7 @@ import preved.medved.csv.FileFormatter;
 
 @Log4j2
 public class FakeDataGenerator {
-  private CommandLineArguments arguments;
+  private final CommandLineArguments arguments;
 
   public FakeDataGenerator(CommandLineArguments arguments) {
     this.arguments = arguments;
@@ -59,7 +59,7 @@ public class FakeDataGenerator {
     String minSizeLimitHuman = FileUtils.byteCountToDisplaySize(minSizeLimit).toString();
 
     for (int i = 0; i < arguments.getAmountFiles(); i++) {
-      Long fileSizeCounter = Long.valueOf(0);
+      Long fileSizeCounter = 0L;
 
       String filePath = getTargetFileName().toFile().toString();
       log.info("Writing data to file: {}", filePath);
@@ -68,7 +68,7 @@ public class FakeDataGenerator {
           new CsvListWriter(new FileWriter(filePath), CsvPreference.STANDARD_PREFERENCE);
       targetFileWriter.writeHeader(header);
 
-      fileSizeCounter += Long.valueOf(Strings.join(",", header).length());
+      fileSizeCounter += (long) Strings.join(",", header).length();
 
       try (ProgressBar pb2 =
           new ProgressBarBuilder()
@@ -82,7 +82,7 @@ public class FakeDataGenerator {
           List<String> currentLine = fileFormatter.produceData();
           targetFileWriter.write(currentLine, cellProcessor);
 
-          fileSizeCounter += Long.valueOf(Strings.join(",", currentLine).length());
+          fileSizeCounter += (long) Strings.join(",", currentLine).length();
           pb2.stepTo(fileSizeCounter);
         }
       }
@@ -93,10 +93,8 @@ public class FakeDataGenerator {
   }
 
   private Path getTargetFileName() {
-    String basename =
-        new StringBuilder().append(UUID.randomUUID().toString()).append(".csv").toString();
-    Path path = Paths.get(arguments.getPath(), basename);
-    return path;
+    String basename = UUID.randomUUID().toString() + ".csv";
+    return Paths.get(arguments.getPath(), basename);
   }
 
   private String getPbUnitName() {
@@ -111,11 +109,11 @@ public class FakeDataGenerator {
 
   private Long getPbUnitSize() {
     if (arguments.getSizeGiBiBytes() < 10) {
-      return Long.valueOf(1024);
+      return 1024L;
     }
     if (arguments.getSizeGiBiBytes() < 100) {
-      return Long.valueOf(1024 * 1024);
+      return (long) (1024 * 1024);
     }
-    return Long.valueOf(1024 * 1024 * 1024);
+    return (long) (1024 * 1024 * 1024);
   }
 }

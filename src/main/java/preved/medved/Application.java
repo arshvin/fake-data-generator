@@ -32,7 +32,6 @@ public class Application {
       assignInstance(new Application()).run(arguments);
     } catch (final ParameterException ex) {
       log.error("Error parsing arguments: {}", args, ex);
-      System.err.println(ex.getMessage());
       commander.usage();
     } catch (IOException
         | InvocationTargetException
