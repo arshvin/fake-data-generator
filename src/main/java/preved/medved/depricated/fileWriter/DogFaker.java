@@ -1,11 +1,11 @@
-package preved.medved.producers;
+package preved.medved.depricated.fileWriter;
 
 import com.github.javafaker.Dog;
 import com.github.javafaker.Faker;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.BackgroundFetcher;
+import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class DogFaker extends BackgroundFetcher {
@@ -27,7 +27,7 @@ public class DogFaker extends BackgroundFetcher {
 
     fetchTask =
         () -> {
-          log.trace("Generating data from Runnable task");
+          log.debug("Generating data from Runnable task");
           queue.add(
               Arrays.asList(
                   dog.name(),

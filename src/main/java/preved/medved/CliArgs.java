@@ -7,7 +7,7 @@ import lombok.Data;
 /** Command line arguments passed to the application. */
 @Builder(toBuilder = true)
 @Data
-public class CommandLineArguments {
+public class CliArgs {
   @Builder.Default
   @Parameter(
       names = {"--destination-folder", "-p"},
@@ -26,18 +26,18 @@ public class CommandLineArguments {
       description = "Minimum size of data file for generating (in GiB)")
   private Integer sizeGiBiBytes = 1;
 
-  @Parameter(names = "--book-faker", description = "Book faker'll be used")
+  @Parameter(names = "--book-faker", description = "Book faker will be used")
   private boolean books;
 
-  @Parameter(names = "--beer-faker", description = "Beer faker'll be used")
+  @Parameter(names = "--beer-faker", description = "Beer faker will be used")
   private boolean beers;
 
-  @Parameter(names = "--cat-faker", description = "Cat faker'll be used")
+  @Parameter(names = "--cat-faker", description = "Cat faker will be used")
   private boolean cat;
 
-  @Parameter(names = "--dog-faker", description = "Dog faker'll be used")
+  @Parameter(names = "--dog-faker", description = "Dog faker will be used")
   private boolean dog;
 
-  @Parameter(names = "--finance-faker", description = "Finance faker'll be used")
+  @Parameter(names = "--finance-faker", description = "Finance faker will be used")
   private boolean finance;
 }

@@ -1,11 +1,11 @@
-package preved.medved.producers;
+package preved.medved.depricated.fileWriter;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.Finance;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.BackgroundFetcher;
+import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class FinanceFaker extends BackgroundFetcher {
@@ -17,7 +17,7 @@ public class FinanceFaker extends BackgroundFetcher {
 
     fetchTask =
         () -> {
-          log.trace("Generating data from Runnable task");
+          log.debug("Generating data from Runnable task");
           queue.add(Arrays.asList(finance.bic(), finance.creditCard(), finance.iban()));
         };
 

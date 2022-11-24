@@ -5,6 +5,7 @@ import com.beust.jcommander.ParameterException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import lombok.extern.log4j.Log4j2;
+import preved.medved.depricated.FakeDataGenerator;
 
 /** Application main class. */
 @Log4j2
@@ -14,25 +15,21 @@ public class Application {
 
   public static void main(final String[] args) {
     log.info("Starting application...");
-    final CommandLineArguments arguments = CommandLineArguments.builder().build();
-    final JCommander commander =
-        JCommander.newBuilder().addObject(arguments).programName("Fake data generator").build();
+    final CliArgs opts = CliArgs.builder().build();
+    final JCommander jc =
+        JCommander.newBuilder().addObject(opts).programName("Fake data generator").build();
 
     try {
-      commander.parse(args);
+      jc.parse(args);
 
-      if (!(arguments.isBeers()
-          || arguments.isCat()
-          || arguments.isDog()
-          || arguments.isBooks()
-          || arguments.isFinance())) {
-        throw new ParameterException("At least 1 faker must be chosen through CLI");
+      if (!(opts.isBeers() || opts.isCat() || opts.isDog() || opts.isBooks() || opts.isFinance())) {
+        throw new ParameterException("At least 1 faker must be chosen");
       }
 
-      assignInstance(new Application()).run(arguments);
+      assignInstance(new Application()).run(opts);
     } catch (final ParameterException ex) {
       log.error("Error parsing arguments: {}", args, ex);
-      commander.usage();
+      jc.usage();
     } catch (IOException
         | InvocationTargetException
         | NoSuchMethodException
@@ -50,7 +47,7 @@ public class Application {
     return INSTANCE;
   }
 
-  public void run(final CommandLineArguments arguments)
+  public void run(final CliArgs arguments)
       throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
           IllegalAccessException {
     log.info("Started application");

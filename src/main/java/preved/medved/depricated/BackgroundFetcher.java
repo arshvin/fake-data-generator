@@ -1,12 +1,12 @@
-package preved.medved;
+package preved.medved.depricated;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.*;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.producers.Header;
-import preved.medved.producers.Producer;
+import preved.medved.depricated.fileWriter.Header;
+import preved.medved.depricated.fileWriter.Producer;
 
 @Log4j2
 public class BackgroundFetcher implements Producer, Header {
@@ -16,22 +16,22 @@ public class BackgroundFetcher implements Producer, Header {
   protected String[] header;
 
   protected void requestNewData() {
-    log.trace("Submitting the Runnable task");
+    log.debug("Submitting the Runnable task");
     executor.submit(fetchTask);
   }
   ;
 
   protected List<String> retrieveData() throws InterruptedException {
     while (queue.isEmpty()) {
-      log.trace("Waiting data from the queue...");
+      log.debug("Waiting data from the queue...");
     }
-    log.trace("Getting data from the queue");
+    log.debug("Getting data from the queue");
     return queue.poll();
   }
   ;
 
   public List<String> produceData() {
-    log.trace("Retrieving data");
+    log.debug("Retrieving data");
     List<String> items = null;
     try {
       items = retrieveData();
@@ -44,10 +44,6 @@ public class BackgroundFetcher implements Producer, Header {
 
   @Override
   public void close() {
-    shutdown();
-  }
-
-  protected void shutdown() {
     executor.shutdown();
   }
 

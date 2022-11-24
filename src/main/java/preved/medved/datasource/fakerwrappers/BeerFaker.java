@@ -1,11 +1,11 @@
-package preved.medved.producers;
+package preved.medved.datasource.fakerwrappers;
 
 import com.github.javafaker.Beer;
 import com.github.javafaker.Faker;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.BackgroundFetcher;
+import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class BeerFaker extends BackgroundFetcher {
@@ -17,7 +17,7 @@ public class BeerFaker extends BackgroundFetcher {
 
     fetchTask =
         () -> {
-          log.trace("Generating data from Runnable task");
+          log.debug("Generating data from Runnable task");
           queue.add(
               Arrays.asList(beer.name(), beer.style(), beer.hop(), beer.yeast(), beer.malt()));
         };

@@ -1,4 +1,4 @@
-package preved.medved.csv;
+package preved.medved.depricated.csv;
 
 import com.beust.jcommander.Strings;
 import com.github.javafaker.Faker;
@@ -11,13 +11,13 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import preved.medved.producers.BeerFaker;
-import preved.medved.producers.BookFaker;
-import preved.medved.producers.CatFaker;
-import preved.medved.producers.DogFaker;
-import preved.medved.producers.FinanceFaker;
-import preved.medved.producers.Header;
-import preved.medved.producers.Producer;
+import preved.medved.depricated.fileWriter.BeerFaker;
+import preved.medved.depricated.fileWriter.BookFaker;
+import preved.medved.depricated.fileWriter.CatFaker;
+import preved.medved.depricated.fileWriter.DogFaker;
+import preved.medved.depricated.fileWriter.FinanceFaker;
+import preved.medved.depricated.fileWriter.Header;
+import preved.medved.depricated.fileWriter.Producer;
 
 @Log4j2
 public class FileFormatter {
