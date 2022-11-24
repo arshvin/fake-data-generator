@@ -3,27 +3,7 @@ package preved.medved;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import lombok.extern.log4j.Log4j2;
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarBuilder;
-import me.tongfei.progressbar.ProgressBarStyle;
-import preved.medved.cli.DebugArgs;
-import preved.medved.cli.DefaultArgs;
-import preved.medved.generator.pipelines.DefaultPipeline;
-import preved.medved.generator.source.DataCollector;
-import preved.medved.generator.source.collectors.DefaultCollector;
-import preved.medved.generator.source.faikers.Book;
-import preved.medved.generator.sink.CsvFileTargetWriter;
-import preved.medved.generator.sink.DataWriter;
-import preved.medved.generator.sink.ParquetFileTargetWriter;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import preved.medved.depricated.FakeDataGenerator;
 
 /** Application main class. */
 @Log4j2
@@ -33,35 +13,21 @@ public class Application {
 
   public static void main(final String[] args) {
     log.info("Starting application...");
-    final DefaultArgs defaultArgs = DefaultArgs.builder().build();
-    final DebugArgs debugArgs = DebugArgs.builder().build();
-
+    final CliArgs opts = CliArgs.builder().build();
     final JCommander jc =
-        JCommander.newBuilder().addObject(defaultArgs).programName("Fake data generator").build();
+        JCommander.newBuilder().addObject(opts).programName("Fake data generator").build();
 
     try {
       jc.parse(args);
 
-      if (jc.getParsedCommand() != "debug") {
-        if (!(defaultArgs.isBeers()
-            || defaultArgs.isCat()
-            || defaultArgs.isDog()
-            || defaultArgs.isBooks()
-            || defaultArgs.isFinance())) {
-          throw new ParameterException("At least 1 faker must be chosen");
-        }
-
-        if (!(defaultArgs.isCsvOutput() || defaultArgs.isParquetOutput())) {
-          throw new ParameterException("At least 1 output file format should be chosen");
-        }
-
-        assignInstance(new Application()).run(defaultArgs);
-      } else {
-        new ExperimentalDataProcessor(debugArgs).run();
+      if (!(opts.isBeers() || opts.isCat() || opts.isDog() || opts.isBooks() || opts.isFinance())) {
+        throw new ParameterException("At least 1 faker must be chosen");
       }
+
+      assignInstance(new Application()).run(opts);
     } catch (final ParameterException ex) {
       log.error("Error parsing arguments: {}", args, ex);
-      commander.usage();
+      jc.usage();
     } catch (IOException
         | InvocationTargetException
         | NoSuchMethodException
@@ -79,7 +45,9 @@ public class Application {
     return INSTANCE;
   }
 
-  public void run(final DefaultArgs arguments) throws IOException {
+  public void run(final CliArgs arguments)
+      throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
+          IllegalAccessException {
     log.info("Started application");
 
     Long minSizeLimit = Long.valueOf(arguments.getSizeGiBiBytes()) * 1024 * 1024 * 1024;
