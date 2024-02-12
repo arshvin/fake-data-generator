@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder(toBuilder = true)
 @Data
 public class CliArgs {
-  @Builder.Default
   @Parameter(
       names = {"--destination-folder", "-p"},
       description = "Where put the files")

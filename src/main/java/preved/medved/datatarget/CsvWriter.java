@@ -1,3 +1,11 @@
 package preved.medved.datatarget;
 
-public class CsvWriter {}
+import java.util.List;
+
+public class CsvWriter implements FileWriter{
+
+    @Override
+    public void writeRow(List<String> row) {
+
+    }
+}
