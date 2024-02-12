@@ -9,7 +9,7 @@ import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class BookFaker extends BackgroundFetcher {
-  private Book book;
+  private final Book book;
 
   public BookFaker(Faker faker) {
     header = new String[] {"book.author", "book.title", "book.publisher", "book.genre"};

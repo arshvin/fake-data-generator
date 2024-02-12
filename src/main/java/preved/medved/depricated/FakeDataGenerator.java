@@ -57,7 +57,7 @@ public class FakeDataGenerator {
     log.info("Column names are:\n{}", Strings.join("|", header));
 
     Long minSizeLimit = Long.valueOf(arguments.getSizeGiBiBytes()) * 1024 * 1024 * 1024;
-    String minSizeLimitHuman = FileUtils.byteCountToDisplaySize(minSizeLimit).toString();
+    String minSizeLimitHuman = FileUtils.byteCountToDisplaySize(minSizeLimit);
 
     for (int i = 0; i < arguments.getAmountFiles(); i++) {
       Long fileSizeCounter = 0L;
@@ -94,7 +94,7 @@ public class FakeDataGenerator {
   }
 
   private Path getTargetFileName() {
-    String basename = UUID.randomUUID().toString() + ".csv";
+    String basename = UUID.randomUUID() + ".csv";
     return Paths.get(arguments.getPath(), basename);
   }
 

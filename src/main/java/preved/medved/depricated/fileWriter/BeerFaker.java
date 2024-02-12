@@ -9,7 +9,7 @@ import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class BeerFaker extends BackgroundFetcher {
-  private Beer beer;
+  private final Beer beer;
 
   public BeerFaker(Faker faker) {
     header = new String[] {"beer.name", "beer.style", "beer.hop", "beer.yeast", "beer.malt"};

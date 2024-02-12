@@ -9,7 +9,7 @@ import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class CatFaker extends BackgroundFetcher {
-  private Cat cat;
+  private final Cat cat;
 
   public CatFaker(Faker faker) {
     header = new String[] {"cat.name", "cat.breed", "cat.registry"};

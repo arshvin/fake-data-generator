@@ -9,7 +9,7 @@ import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class FinanceFaker extends BackgroundFetcher {
-  private Finance finance;
+  private final Finance finance;
 
   public FinanceFaker(Faker faker) {
     header = new String[] {"finance.bic", "finance.creaditCard", "finance.iban"};

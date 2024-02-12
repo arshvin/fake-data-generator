@@ -8,19 +8,16 @@ import lombok.Data;
 @Builder(toBuilder = true)
 @Data
 public class CliArgs {
-  @Builder.Default
   @Parameter(
       names = {"--destination-folder", "-p"},
       description = "Where put the files")
   private String path = ".";
 
-  @Builder.Default
   @Parameter(
       names = {"--amount-files", "-n"},
       description = "Amount of data files for generating")
   private Integer amountFiles = 1;
 
-  @Builder.Default
   @Parameter(
       names = {"--file-size", "-s"},
       description = "Minimum size of data file for generating (in GiB)")

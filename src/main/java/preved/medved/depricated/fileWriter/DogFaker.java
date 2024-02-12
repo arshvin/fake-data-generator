@@ -9,7 +9,7 @@ import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
 public class DogFaker extends BackgroundFetcher {
-  private Dog dog;
+  private final Dog dog;
 
   public DogFaker(Faker faker) {
     header =
