@@ -7,8 +7,7 @@ import lombok.Data;
 /** Command line arguments passed to the application. */
 @Builder(toBuilder = true)
 @Data
-public class CliArgs {
-  @Builder.Default
+public class DefaultArgs {
   @Parameter(
       names = {"--destination-folder", "-p"},
       description = "Where put the files")

@@ -1,16 +1,14 @@
 package preved.medved.processor;
 
 import lombok.RequiredArgsConstructor;
-import preved.medved.CliArgs;
-import preved.medved.datasource.DataRetriever;
-import preved.medved.datasource.DefaultDataRetriever;
-import preved.medved.datasource.FakerType;
-
-import java.util.LinkedHashSet;
+import preved.medved.cli.DefaultArgs;
+import preved.medved.depricated.datasource.DataRetriever;
+import preved.medved.depricated.datasource.DefaultDataRetriever;
+import preved.medved.depricated.datasource.FakerType;
 
 @RequiredArgsConstructor
 public class FakeDataGenerator2 {
-  private final CliArgs opts;
+  private final DefaultArgs opts;
     private DataRetriever dataRetriever;
 
 
