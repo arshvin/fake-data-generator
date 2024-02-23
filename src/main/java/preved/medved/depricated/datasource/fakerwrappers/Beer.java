@@ -1,4 +1,4 @@
-package preved.medved.datasource.fakerwrappers;
+package preved.medved.depricated.datasource.fakerwrappers;
 
 import lombok.extern.log4j.Log4j2;
 

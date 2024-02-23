@@ -16,14 +16,14 @@ import org.apache.commons.io.FileUtils;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvListWriter;
 import org.supercsv.prefs.CsvPreference;
-import preved.medved.CliArgs;
+import preved.medved.cli.DefaultArgs;
 import preved.medved.depricated.csv.FileFormatter;
 
 @Log4j2
 public class FakeDataGenerator {
-  private final CliArgs arguments;
+  private final DefaultArgs arguments;
 
-  public FakeDataGenerator(CliArgs arguments) {
+  public FakeDataGenerator(DefaultArgs arguments) {
     this.arguments = arguments;
   }
 

@@ -10,8 +10,8 @@ import preved.medved.depricated.fileWriter.Producer;
 
 @Log4j2
 public class BackgroundFetcher implements Producer, Header {
-  private static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-  protected Queue<List<String>> queue = new ConcurrentLinkedQueue<>();
+  private static final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool(); //TODO: Choose the better performance pool
+  protected Queue<List<String>> queue = new LinkedBlockingQueue<>();
   protected Runnable fetchTask;
   protected String[] header;
 
@@ -21,7 +21,7 @@ public class BackgroundFetcher implements Producer, Header {
   }
 
   protected List<String> retrieveData() throws InterruptedException {
-    while (queue.isEmpty()) {
+    while (queue.isEmpty()) { //TODO: Improve this condition, set timer, whatever
       log.debug("Waiting data from the queue...");
     }
     log.debug("Getting data from the queue");

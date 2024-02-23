@@ -1,4 +1,4 @@
-package preved.medved;
+package preved.medved.cli;
 
 import com.beust.jcommander.Parameter;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Data;
 /** Command line arguments passed to the application. */
 @Builder(toBuilder = true)
 @Data
-public class CliArgs {
+public class DefaultArgs {
   @Parameter(
       names = {"--destination-folder", "-p"},
       description = "Where put the files")

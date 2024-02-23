@@ -1,4 +1,4 @@
-package preved.medved.datasource;
+package preved.medved.depricated.datasource;
 
 public enum FakerType {
   BEER,

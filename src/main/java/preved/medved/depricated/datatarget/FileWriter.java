@@ -1,4 +1,4 @@
-package preved.medved.datatarget;
+package preved.medved.depricated.datatarget;
 
 import java.util.List;
 

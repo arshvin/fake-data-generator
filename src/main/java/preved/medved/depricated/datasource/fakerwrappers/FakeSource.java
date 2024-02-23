@@ -1,4 +1,4 @@
-package preved.medved.datasource.fakerwrappers;
+package preved.medved.depricated.datasource.fakerwrappers;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package preved.medved.datasource.fakerwrappers;
+package preved.medved.depricated.datasource.fakerwrappers;
 
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
 @Log4j2
-public class Book implements FakeSource {
+public class Dog implements FakeSource {
 
     @Override
     public List<String> getFake() {

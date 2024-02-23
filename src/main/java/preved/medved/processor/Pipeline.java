@@ -1,7 +1,7 @@
 package preved.medved.processor;
 
-import preved.medved.datasource.DataRetriever;
-import preved.medved.datatarget.FileWriter;
+import preved.medved.depricated.datasource.DataRetriever;
+import preved.medved.depricated.datatarget.FileWriter;
 
 public class Pipeline implements Runnable{
     public Pipeline(DataRetriever source, FileWriter target ) {
