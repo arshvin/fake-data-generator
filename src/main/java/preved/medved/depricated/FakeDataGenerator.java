@@ -67,6 +67,8 @@ public class FakeDataGenerator {
 
       CsvListWriter targetFileWriter =
           new CsvListWriter(new FileWriter(filePath), CsvPreference.STANDARD_PREFERENCE);
+
+
       targetFileWriter.writeHeader(header);
 
       fileSizeCounter += (long) Strings.join(",", header).length();

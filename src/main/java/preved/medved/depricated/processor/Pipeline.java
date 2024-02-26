@@ -1,4 +1,4 @@
-package preved.medved.processor;
+package preved.medved.depricated.processor;
 
 import preved.medved.depricated.datasource.DataRetriever;
 import preved.medved.depricated.datatarget.FileWriter;

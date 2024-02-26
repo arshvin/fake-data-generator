@@ -1,4 +1,4 @@
-package preved.medved.processor;
+package preved.medved.depricated.processor;
 
 public class DataCounter {
   void setThreshold() {}

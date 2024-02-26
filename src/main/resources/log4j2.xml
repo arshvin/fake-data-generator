@@ -20,14 +20,9 @@
     </Appenders>
 
     <Loggers>
-        <!-- Logger name="com.mypackage" level="DEBUG" />
-            <AppenderRef ref="MyAppender"/>
-        </Logger -->
-
-        <Logger name="preved.medved" level="INFO" />
         <Root level="INFO">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+<!--            <AppenderRef ref="File"/>-->
         </Root>
     </Loggers>
 </Configuration>

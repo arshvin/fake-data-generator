@@ -1,4 +1,4 @@
-package preved.medved.processor;
+package preved.medved.depricated.processor;
 
 import lombok.RequiredArgsConstructor;
 import preved.medved.cli.DefaultArgs;
