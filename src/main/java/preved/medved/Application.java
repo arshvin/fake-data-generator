@@ -12,7 +12,7 @@ import preved.medved.generator.pipelines.DefaultPipeline;
 import preved.medved.generator.source.DataCollector;
 import preved.medved.generator.source.collectors.DefaultCollector;
 import preved.medved.generator.source.faikers.Book;
-import preved.medved.generator.target.CsvWriter;
+import preved.medved.generator.target.CsvFileTargetWriter;
 import preved.medved.generator.target.DataWriter;
 
 import java.io.FileOutputStream;
@@ -91,12 +91,12 @@ public class Application {
     }
 
     for (int i = 0; i < arguments.getAmountFiles(); i++) {
-      Path fullName = Paths.get(arguments.getPath(), UUID.randomUUID().toString() + ".csv");
-      OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(fullName.toFile()));
-
       HashSet<DataWriter> dataWriters = new HashSet<DataWriter>();
 
-      dataWriters.add(new CsvWriter(output));
+      Path fullName = Paths.get(arguments.getPath(), UUID.randomUUID().toString() + ".csv");
+
+      //TODO: Here we need to provide the way of instantiate different writer types. Also it's required to be able to adjust the CSVWriter
+      dataWriters.add(new CsvFileTargetWriter(fullName));
       dataPipeline.setDataWriters(dataWriters);
 
       Long fileSizeCounter = 0L;
