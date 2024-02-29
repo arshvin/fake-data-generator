@@ -38,6 +38,8 @@
         <guava.version>31.1-jre</guava.version>
         <supercsv.version>2.4.0</supercsv.version>
         <common.io.version>2.11.0</common.io.version>
+        <apache.parquet.version>1.13.0</apache.parquet.version>
+        <progress.bar.version>0.9.3</progress.bar.version>
     </properties>
 
     <dependencies>
@@ -115,8 +117,51 @@
         <dependency>
             <groupId>me.tongfei</groupId>
             <artifactId>progressbar</artifactId>
-            <version>0.9.3</version>
+            <version>${progress.bar.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-common</artifactId>
+            <version>${apache.parquet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-encoding</artifactId>
+            <version>${apache.parquet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-column</artifactId>
+            <version>${apache.parquet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-hadoop</artifactId>
+            <version>${apache.parquet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.parquet</groupId>
+            <artifactId>parquet-avro</artifactId>
+            <version>${apache.parquet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-core</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -151,6 +196,14 @@
                   </execution>
                 </executions>
               </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
