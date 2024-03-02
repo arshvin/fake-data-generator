@@ -12,9 +12,9 @@ import preved.medved.generator.pipelines.DefaultPipeline;
 import preved.medved.generator.source.DataCollector;
 import preved.medved.generator.source.collectors.DefaultCollector;
 import preved.medved.generator.source.faikers.Book;
-import preved.medved.generator.target.CsvFileTargetWriter;
-import preved.medved.generator.target.DataWriter;
-import preved.medved.generator.target.ParquetFileTargetWriter;
+import preved.medved.generator.sink.CsvFileTargetWriter;
+import preved.medved.generator.sink.DataWriter;
+import preved.medved.generator.sink.ParquetFileTargetWriter;
 
 import java.io.IOException;
 import java.nio.file.Path;

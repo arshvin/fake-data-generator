@@ -3,7 +3,7 @@ package preved.medved.generator.pipelines;
 import lombok.Setter;
 import preved.medved.generator.Pipeline;
 import preved.medved.generator.source.DataCollector;
-import preved.medved.generator.target.DataWriter;
+import preved.medved.generator.sink.DataWriter;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
