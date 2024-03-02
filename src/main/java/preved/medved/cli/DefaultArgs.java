@@ -37,4 +37,10 @@ public class DefaultArgs {
 
   @Parameter(names = "--finance-faker", description = "Finance faker will be used")
   private boolean finance;
+
+  @Parameter(names = "--csv", description = "CSV format will be used as output")
+  private boolean csvOutput;
+
+  @Parameter(names = "--parquet", description = "Parquet format will be used as output")
+  private boolean parquetOutput;
 }
