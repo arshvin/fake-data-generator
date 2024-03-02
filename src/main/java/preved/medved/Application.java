@@ -14,10 +14,9 @@ import preved.medved.generator.source.collectors.DefaultCollector;
 import preved.medved.generator.source.faikers.Book;
 import preved.medved.generator.target.CsvFileTargetWriter;
 import preved.medved.generator.target.DataWriter;
+import preved.medved.generator.target.ParquetFileTargetWriter;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
@@ -38,10 +37,7 @@ public class Application {
     final DebugArgs debugArgs = DebugArgs.builder().build();
 
     final JCommander jc =
-        JCommander.newBuilder()
-            .addObject(defaultArgs)
-            .programName("Fake data generator")
-            .build();
+        JCommander.newBuilder().addObject(defaultArgs).programName("Fake data generator").build();
 
     try {
       jc.parse(args);
@@ -54,6 +50,11 @@ public class Application {
             || defaultArgs.isFinance())) {
           throw new ParameterException("At least 1 faker must be chosen");
         }
+
+        if (!(defaultArgs.isCsvOutput() || defaultArgs.isParquetOutput())) {
+          throw new ParameterException("At least 1 output file format should be chosen");
+        }
+
         assignInstance(new Application()).run(defaultArgs);
       } else {
         new ExperimentalDataProcessor(debugArgs).run();
@@ -93,10 +94,18 @@ public class Application {
     for (int i = 0; i < arguments.getAmountFiles(); i++) {
       HashSet<DataWriter> dataWriters = new HashSet<DataWriter>();
 
-      Path fullName = Paths.get(arguments.getPath(), UUID.randomUUID().toString() + ".csv");
+      String uuid = UUID.randomUUID().toString();
 
-      //TODO: Here we need to provide the way of instantiate different writer types. Also it's required to be able to adjust the CSVWriter
-      dataWriters.add(new CsvFileTargetWriter(fullName));
+      if (arguments.isCsvOutput()) {
+        Path fullName = Paths.get(arguments.getPath(), uuid + ".csv");
+        dataWriters.add(new CsvFileTargetWriter(fullName));
+      }
+
+      if (arguments.isParquetOutput()) {
+        Path fullName = Paths.get(arguments.getPath(), uuid + ".parquet");
+        dataWriters.add(new ParquetFileTargetWriter(fullName));
+      }
+
       dataPipeline.setDataWriters(dataWriters);
 
       Long fileSizeCounter = 0L;
@@ -117,14 +126,14 @@ public class Application {
         }
       }
 
-      dataWriters.forEach(dataWriter -> {
-        try {
-          dataWriter.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      });
-      log.info("Closed file: {}", fullName);
+      dataWriters.forEach(
+          dataWriter -> {
+            try {
+              dataWriter.close();
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          });
     }
 
     executor.shutdown();
