@@ -1,8 +1,6 @@
 package preved.medved.generator.source.faikers;
 
-import com.google.common.collect.Streams;
-import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import preved.medved.generator.source.DataProducer;
 
 import java.util.ArrayList;
@@ -13,14 +11,16 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-@Log4j2
 public class AbstractFaiker implements DataProducer {
+  private final Logger log;
   protected ExecutorService executor;
   protected List<Callable<String>> dataFetchers = new ArrayList<>();
   protected Queue<Future<String>> generatedDataResult = new LinkedList<Future<String>>();
+
+  public AbstractFaiker(Logger log) {
+    this.log = log;
+  }
 
   protected void generateData() {
     generatedDataResult.addAll(
@@ -40,6 +40,7 @@ public class AbstractFaiker implements DataProducer {
       Future<String> item = generatedDataResult.poll();
       int counter = 0;
       while (!item.isDone()) {
+        counter++;
         log.debug("Waiting result from faiker. Iteration: {}", counter);
       }
 
@@ -61,6 +62,7 @@ public class AbstractFaiker implements DataProducer {
   ;
 
   protected void fillBuffer(int cyclesNumber) {
+    log.debug("Creating and filling buffer for read with {} available records", cyclesNumber);
     for (int i = 0; i < cyclesNumber; i++) {
       generateData();
     }

@@ -28,18 +28,3 @@ public class AvroSchemaGenerator {
         private String defaultValue = "null";
     }
 }
-
-
-//{
-//        "type" : "record",
-//        "name" : "test_table",
-//        "fields" : [ {
-//        "name" : "c1",
-//        "type" : [ "null", "int" ],
-//        "default" : null
-//        }, {
-//        "name" : "c2",
-//        "type" : [ "null", "string" ],
-//        "default" : null
-//        } ]
-//        }

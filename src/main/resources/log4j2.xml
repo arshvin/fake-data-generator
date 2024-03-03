@@ -12,7 +12,7 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <OnStartupTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="10MB"/>
+                <SizeBasedTriggeringPolicy size="300MB"/>
                 <TimeBasedTriggeringPolicy interval="1" />
             </Policies>
             <DefaultRolloverStrategy max="5"/>
@@ -20,12 +20,7 @@
     </Appenders>
 
     <Loggers>
-        <!-- Logger name="com.mypackage" level="DEBUG" />
-            <AppenderRef ref="MyAppender"/>
-        </Logger -->
-
-        <Logger name="preved.medved" level="DEBUG" />
-        <Root level="INFO">
+        <Root level="${env:LOG_LEVEL:-INFO}">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Root>
