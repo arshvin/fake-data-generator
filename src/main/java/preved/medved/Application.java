@@ -2,6 +2,7 @@ package preved.medved;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.Strings;
 import lombok.extern.log4j.Log4j2;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
@@ -14,7 +15,7 @@ import preved.medved.generator.sink.ParquetFileTargetWriter;
 import preved.medved.generator.source.DataCollector;
 import preved.medved.generator.source.collectors.DefaultCollector;
 import preved.medved.generator.source.faikers.Book;
-import preved.medved.generator.source.faikers.RecordDescriptor;
+import preved.medved.generator.source.RecordDescriptor;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -97,6 +98,8 @@ public class Application {
       if (arguments.isCsvOutput()) {
         Path fullName = Paths.get(arguments.getPath(), uuid + ".csv");
         dataWriters.add(new CsvFileTargetWriter(fullName, headers));
+
+        log.info("Record column headers: {}", Strings.join(", ", headers));
       }
 
       if (arguments.isParquetOutput()) {
@@ -105,7 +108,6 @@ public class Application {
       }
 
       dataPipeline.setDataWriters(dataWriters);
-
       Long fileSizeCounter = 0L;
 
       try (ProgressBar pb =

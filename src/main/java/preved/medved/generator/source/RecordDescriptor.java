@@ -1,4 +1,4 @@
-package preved.medved.generator.source.faikers;
+package preved.medved.generator.source;
 
 import java.util.List;
 

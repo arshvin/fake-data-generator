@@ -3,7 +3,7 @@ package preved.medved.generator.source.collectors;
 import lombok.extern.log4j.Log4j2;
 import preved.medved.generator.source.DataCollector;
 import preved.medved.generator.source.DataProducer;
-import preved.medved.generator.source.faikers.RecordDescriptor;
+import preved.medved.generator.source.RecordDescriptor;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;

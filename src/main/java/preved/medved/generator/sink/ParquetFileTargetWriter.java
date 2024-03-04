@@ -12,6 +12,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Log4j2
@@ -21,7 +22,7 @@ public class ParquetFileTargetWriter implements DataWriter {
   private final String[] headers;
 
   public ParquetFileTargetWriter(Path output, List<String> headers) throws IOException {
-    this.headers = (String[]) headers.toArray();
+    this.headers = headers.toArray(new String[0]);
 
     log.debug("Avro record schema preparation");
     AvroSchemaGenerator schemaGenerator = new AvroSchemaGenerator("Books");

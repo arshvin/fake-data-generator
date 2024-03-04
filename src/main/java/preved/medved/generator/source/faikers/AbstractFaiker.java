@@ -1,22 +1,25 @@
 package preved.medved.generator.source.faikers;
 
+import com.github.javafaker.DateAndTime;
+import lombok.SneakyThrows;
 import org.apache.logging.log4j.Logger;
 import preved.medved.generator.source.DataProducer;
+import preved.medved.generator.source.RecordDescriptor;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public class AbstractFaiker implements DataProducer {
+public class AbstractFaiker implements DataProducer, RecordDescriptor {
   private final Logger log;
   protected ExecutorService executor;
-  protected List<Callable<String>> dataFetchers = new ArrayList<>();
-  protected Queue<Future<String>> generatedDataResult = new LinkedList<Future<String>>();
+  protected String[] headers;
+
+  protected List<Callable<String[]>> dataFetchers = new ArrayList<>();
+  protected Queue<Future<String[]>> generatedDataResult = new LinkedList<>();
 
   public AbstractFaiker(Logger log) {
     this.log = log;
@@ -33,29 +36,23 @@ public class AbstractFaiker implements DataProducer {
   }
   ;
 
+  @SneakyThrows
   public List<String> produce() {
     ArrayList<String> result = new ArrayList<String>();
 
     for (int i = 0; i < dataFetchers.size(); i++) {
-      Future<String> item = generatedDataResult.poll();
-      int counter = 0;
-      while (!item.isDone()) {
-        counter++;
-        log.debug("Waiting result from faiker. Iteration: {}", counter);
-      }
+      Future<String[]> taskResult = generatedDataResult.poll();
 
-      String faikerTaskResult = null;
-      try {
-        faikerTaskResult = item.get();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      } catch (ExecutionException e) {
-        e.printStackTrace();
-      }
+      Instant before = Instant.now();
+      final String[] faikerTaskResult = taskResult.get();
+      Instant after = Instant.now();
+      log.debug("Result retrieved during {} milliseconds", Duration.between(before,after).toMillis());
 
-      log.debug("Retrieved result: {}", faikerTaskResult);
-      result.add(faikerTaskResult);
+      for (int j = 0; j < faikerTaskResult.length; j++) {
+        result.add(faikerTaskResult[j]);
+      }
     }
+
     generateData();
     return result;
   }
@@ -66,5 +63,9 @@ public class AbstractFaiker implements DataProducer {
     for (int i = 0; i < cyclesNumber; i++) {
       generateData();
     }
+  }
+
+  public List<String> retrieveHeaders() {
+    return Arrays.stream(headers).toList();
   }
 }
