@@ -54,8 +54,8 @@
         <mockito.version>4.6.1</mockito.version>
         <log4j2.version>2.17.2</log4j2.version>
         <faker.version>1.0.2</faker.version>
-        <jcommander.version>1.82</jcommander.version>
-        <guava.version>31.1-jre</guava.version>
+        <jcommander.version>1.83</jcommander.version>
+<!--        <guava.version>31.1-jre</guava.version>-->
         <supercsv.version>2.4.0</supercsv.version>
         <common.io.version>2.11.0</common.io.version>
     </properties>
@@ -81,16 +81,16 @@
             <version>${log4j2.version}</version>
         </dependency>
 
-        <!-- Google guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; Google guava &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.guava</groupId>-->
+<!--            <artifactId>guava</artifactId>-->
+<!--            <version>${guava.version}</version>-->
+<!--        </dependency>-->
 
         <!-- CLI command line parsing -->
         <dependency>
-            <groupId>com.beust</groupId>
+            <groupId>org.jcommander</groupId>
             <artifactId>jcommander</artifactId>
             <version>${jcommander.version}</version>
         </dependency>

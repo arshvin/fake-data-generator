@@ -1,27 +1,35 @@
 package preved.medved.cli;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 import lombok.Builder;
 import lombok.Data;
+import preved.medved.cli.converters.InputNameToClassMapper;
+import preved.medved.cli.validators.FakerInputList;
+import preved.medved.cli.validators.OutputDataFormats;
+import preved.medved.generator.source.AvailableFakers;
+
+import java.util.LinkedHashSet;
 
 /** Command line arguments passed to the application. */
 @Builder(toBuilder = true)
 @Data
+@Parameters(parametersValidators = {OutputDataFormats.class,FakerInputList.class})
 public class DefaultArgs {
   @Parameter(
       names = {"--destination-folder", "-p"},
       description = "Where put the files")
-  private String path = ".";
+  private String path;
 
   @Parameter(
       names = {"--amount-files", "-n"},
       description = "Amount of data files for generating")
-  private Integer amountFiles = 1;
+  private int amountFiles;
 
   @Parameter(
       names = {"--file-size", "-s"},
       description = "Minimum size of data file for generating (in GiB)")
-  private Integer sizeGiBiBytes = 1;
+  private int sizeGiBiBytes;
 
   @Parameter(names = "--book-faker", description = "Book faker will be used")
   private boolean books;
@@ -43,4 +51,12 @@ public class DefaultArgs {
 
   @Parameter(names = "--parquet", description = "Parquet format will be used as output")
   private boolean parquetOutput;
+
+  @Parameter(
+      names = "--fakers",
+      description =
+          "Space- or comma-separated list of fakers which will be used in specified order",
+      required = true,
+      converter = InputNameToClassMapper.class)
+  private LinkedHashSet<AvailableFakers> fakers;
 }

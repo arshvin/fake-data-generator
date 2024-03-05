@@ -3,6 +3,7 @@ package preved.medved;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Strings;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
@@ -13,8 +14,8 @@ import preved.medved.generator.sink.CsvFileTargetWriter;
 import preved.medved.generator.sink.DataWriter;
 import preved.medved.generator.sink.ParquetFileTargetWriter;
 import preved.medved.generator.source.DataCollector;
+import preved.medved.generator.source.AvailableFakers;
 import preved.medved.generator.source.collectors.DefaultCollector;
-import preved.medved.generator.source.faikers.Book;
 import preved.medved.generator.source.RecordDescriptor;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 /** Application main class. */
 @Log4j2
@@ -41,23 +43,19 @@ public class Application {
     try {
       commander.parse(args);
 
-        if (!(defaultArgs.isBeers()
-            || defaultArgs.isCat()
-            || defaultArgs.isDog()
-            || defaultArgs.isBooks()
-            || defaultArgs.isFinance())) {
-          throw new ParameterException("At least 1 faker must be chosen");
-        }
-
-        if (!(defaultArgs.isCsvOutput() || defaultArgs.isParquetOutput())) {
-          throw new ParameterException("At least 1 output file format should be chosen");
-        }
+//        if (!(defaultArgs.isBeers()
+//            || defaultArgs.isCat()
+//            || defaultArgs.isDog()
+//            || defaultArgs.isBooks()
+//            || defaultArgs.isFinance())) {
+//          throw new ParameterException("At least 1 faker must be chosen");
+//        }
 
         assignInstance(new Application()).run(defaultArgs);
 
     } catch (final ParameterException ex) {
       log.error("Error parsing arguments: {}", args, ex);
-      jc.usage();
+      ex.usage();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -83,10 +81,13 @@ public class Application {
 
     ExecutorService executor = Executors.newCachedThreadPool();
 
-    if (arguments.isBooks()) {
-      Book book = new Book(executor);
-      dataCollector.appendSource(book);
-    }
+    arguments.getFakers().forEach(new Consumer<AvailableFakers>() {
+      @SneakyThrows
+      @Override
+      public void accept(AvailableFakers faker) {
+        dataCollector.appendSource(faker.instantiate(executor));
+      }
+    });
 
     List<String> headers = ((RecordDescriptor) dataCollector).retrieveHeaders();
 
