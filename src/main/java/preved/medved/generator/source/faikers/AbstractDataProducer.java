@@ -1,6 +1,5 @@
 package preved.medved.generator.source.faikers;
 
-import com.github.javafaker.DateAndTime;
 import lombok.SneakyThrows;
 import org.apache.logging.log4j.Logger;
 import preved.medved.generator.source.DataProducer;
@@ -13,7 +12,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public class AbstractFaiker implements DataProducer, RecordDescriptor {
+public class AbstractDataProducer implements DataProducer, RecordDescriptor {
   private final Logger log;
   protected ExecutorService executor;
   protected String[] headers;
@@ -21,7 +20,7 @@ public class AbstractFaiker implements DataProducer, RecordDescriptor {
   protected List<Callable<String[]>> dataFetchers = new ArrayList<>();
   protected Queue<Future<String[]>> generatedDataResult = new LinkedList<>();
 
-  public AbstractFaiker(Logger log) {
+  public AbstractDataProducer(Logger log) {
     this.log = log;
   }
 

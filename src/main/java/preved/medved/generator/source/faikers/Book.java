@@ -1,17 +1,13 @@
 package preved.medved.generator.source.faikers;
 
-import com.github.javafaker.App;
 import com.github.javafaker.Faker;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.generator.source.DataProducer;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 @Log4j2
-public class Book extends AbstractFaiker{
+public class Book extends AbstractDataProducer {
   private int bufferSize = 5;
 
   public Book(ExecutorService executor) {

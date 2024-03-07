@@ -10,7 +10,7 @@ public class InputNameToClassMapper implements IStringConverter<AvailableFakers>
     try {
       return AvailableFakers.valueOf(value.toUpperCase());
     } catch (IllegalArgumentException ex) {
-      throw new ParameterException(String.format("Faker name '%s' could not be found", value));
+      throw new ParameterException(String.format("Faker name '%s' can not be found", value));
     }
   }
 }

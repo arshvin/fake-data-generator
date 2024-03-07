@@ -31,11 +31,11 @@ import java.util.function.Consumer;
 /** Application main class. */
 @Log4j2
 public class Application {
+  static final DefaultArgs defaultArgs = DefaultArgs.builder().build();
 
   public static Application INSTANCE;
 
   public static void main(final String[] args) {
-    final DefaultArgs defaultArgs = DefaultArgs.builder().build();
 
     final JCommander jc =
         JCommander.newBuilder().addObject(defaultArgs).programName("Fake data generator").build();
@@ -43,15 +43,12 @@ public class Application {
     try {
       commander.parse(args);
 
-//        if (!(defaultArgs.isBeers()
-//            || defaultArgs.isCat()
-//            || defaultArgs.isDog()
-//            || defaultArgs.isBooks()
-//            || defaultArgs.isFinance())) {
-//          throw new ParameterException("At least 1 faker must be chosen");
-//        }
+      if (defaultArgs.isHelp()) {
+        jc.usage();
+        System.exit(0);
+      }
 
-        assignInstance(new Application()).run(defaultArgs);
+      assignInstance(new Application()).run();
 
     } catch (final ParameterException ex) {
       log.error("Error parsing arguments: {}", args, ex);
@@ -68,43 +65,46 @@ public class Application {
     return INSTANCE;
   }
 
-  public void run(final CommandLineArguments arguments)
-      throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
-          IllegalAccessException {
+  public void run() throws IOException {
     log.info("Started application");
 
-    new FakeDataGenerator(arguments).process();
+    Long minSizeLimit = Long.valueOf(defaultArgs.getSizeMiBiBytes()) * 1024 * 1024;
 
     DataCollector dataCollector = new DefaultCollector();
     DefaultPipeline dataPipeline = new DefaultPipeline();
     dataPipeline.setDataCollector(dataCollector);
 
-    ExecutorService executor = Executors.newCachedThreadPool();
+//    ExecutorService executor = Executors.newCachedThreadPool();  // 100/100MiBytes (0:01:16 / 0:00:00) 1.3MiBytes/s
+//    ExecutorService executor = Executors.newWorkStealingPool();  // 100/100MiBytes (0:01:02 / 0:00:00) 1.6MiBytes/s
+    ExecutorService executor = Executors.newSingleThreadScheduledExecutor();  // 100/100MiBytes (0:04:28 / 0:00:00) .4MiBytes/s
 
-    arguments.getFakers().forEach(new Consumer<AvailableFakers>() {
-      @SneakyThrows
-      @Override
-      public void accept(AvailableFakers faker) {
-        dataCollector.appendSource(faker.instantiate(executor));
-      }
-    });
+    defaultArgs
+        .getFakers()
+        .forEach(
+            new Consumer<AvailableFakers>() {
+              @SneakyThrows
+              @Override
+              public void accept(AvailableFakers faker) {
+                dataCollector.appendSource(faker.instantiate(executor));
+              }
+            });
 
     List<String> headers = ((RecordDescriptor) dataCollector).retrieveHeaders();
 
-    for (int i = 0; i < arguments.getAmountFiles(); i++) {
+    for (int i = 0; i < defaultArgs.getAmountFiles(); i++) {
       HashSet<DataWriter> dataWriters = new HashSet<DataWriter>();
 
       String uuid = UUID.randomUUID().toString();
 
-      if (arguments.isCsvOutput()) {
-        Path fullName = Paths.get(arguments.getPath(), uuid + ".csv");
+      if (defaultArgs.isCsvOutput()) {
+        Path fullName = Paths.get(defaultArgs.getPath(), uuid + ".csv");
         dataWriters.add(new CsvFileTargetWriter(fullName, headers));
 
         log.info("Record column headers: {}", Strings.join(", ", headers));
       }
 
-      if (arguments.isParquetOutput()) {
-        Path fullName = Paths.get(arguments.getPath(), uuid + ".parquet");
+      if (defaultArgs.isParquetOutput()) {
+        Path fullName = Paths.get(defaultArgs.getPath(), uuid + ".parquet");
         dataWriters.add(new ParquetFileTargetWriter(fullName, headers));
       }
 
@@ -115,7 +115,7 @@ public class Application {
           new ProgressBarBuilder()
               .setStyle(ProgressBarStyle.COLORFUL_UNICODE_BLOCK)
               .setInitialMax(minSizeLimit)
-              .setUnit(getPbUnitName(arguments), getPbUnitSize(arguments))
+              .setUnit(getPbUnitName(defaultArgs), getPbUnitSize(defaultArgs))
               .setTaskName("Fake data generation")
               .showSpeed()
               .build()) {
@@ -139,5 +139,25 @@ public class Application {
 
     executor.shutdown();
     log.info("Exiting application...");
+  }
+
+  private String getPbUnitName(final DefaultArgs arguments) {
+    if (arguments.getSizeMiBiBytes() < 10) {
+      return "Bytes";
+    }
+    if (arguments.getSizeMiBiBytes() < 100) {
+      return "KiBytes";
+    }
+    return "MiBytes";
+  }
+
+  private Long getPbUnitSize(final DefaultArgs arguments) {
+    if (arguments.getSizeMiBiBytes() < 10) {
+      return 1L;
+    }
+    if (arguments.getSizeMiBiBytes() < 100) {
+      return (long) (1024);
+    }
+    return (long) (1024 * 1024);
   }
 }
