@@ -3,11 +3,9 @@ package preved.medved.cli.validators;
 import com.beust.jcommander.IParametersValidator;
 import com.beust.jcommander.ParameterException;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public class FakerInputList implements IParametersValidator {
+public class DataVolumeToGenerate implements IParametersValidator {
     /**
      * Validate all parameters.
      *
@@ -16,10 +14,10 @@ public class FakerInputList implements IParametersValidator {
      */
     @Override
     public void validate(Map<String, Object> parameters) throws ParameterException {
-        List faker = (List) parameters.get("--fakers");
-        if (faker.isEmpty()){
+        if (parameters.get("--file-size") == null
+                || parameters.get("--amount-files") == null) {
             throw new ParameterException(
-                    "At least 1 faker should be specified in --fakers parameter");
+                    "Nothing to do. It's required to specify correct values with --file-size and --amount-files");
         }
     }
 }

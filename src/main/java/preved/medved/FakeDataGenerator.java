@@ -1,121 +1,172 @@
 package preved.medved;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Strings;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.UUID;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
-import org.apache.commons.io.FileUtils;
-import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.prefs.CsvPreference;
-import preved.medved.csv.FileFormatter;
+import preved.medved.cli.CsvRelatedArgs;
+import preved.medved.cli.DefaultArgs;
+import preved.medved.cli.FakersRelatedArgs;
+import preved.medved.cli.ParquetRelatedArgs;
+import preved.medved.generator.pipelines.DefaultPipeline;
+import preved.medved.generator.sink.CsvFileTargetWriter;
+import preved.medved.generator.sink.DataWriter;
+import preved.medved.generator.sink.ParquetFileTargetWriter;
+import preved.medved.generator.source.DataCollector;
+import preved.medved.generator.source.AvailableFakers;
+import preved.medved.generator.source.collectors.DefaultCollector;
+import preved.medved.generator.source.RecordDescriptor;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
+
+/** Application main class. */
 @Log4j2
 public class FakeDataGenerator {
-  private CommandLineArguments arguments;
+  static final DefaultArgs defaultArgs = DefaultArgs.builder().build();
+  static final FakersRelatedArgs fakersRelatedArgs = FakersRelatedArgs.builder().build();
+  static final CsvRelatedArgs csvRelatedArgs = CsvRelatedArgs.builder().build();
+  static final ParquetRelatedArgs parquetRelatedArgs = ParquetRelatedArgs.builder().build();
 
-  public FakeDataGenerator(CommandLineArguments arguments) {
-    this.arguments = arguments;
+  public static FakeDataGenerator INSTANCE;
+
+  public static void main(final String[] args) {
+
+    final JCommander jc =
+        JCommander.newBuilder()
+                .addObject(defaultArgs)
+                .addObject(fakersRelatedArgs)
+                .addObject(csvRelatedArgs)
+                .addObject(parquetRelatedArgs)
+                .programName("fake-data-generator").build();
+
+    try {
+      commander.parse(args);
+
+      if (defaultArgs.isHelp()) {
+        jc.usage();
+        System.exit(0);
+      }
+
+      assignInstance(new FakeDataGenerator()).run();
+
+    } catch (final ParameterException ex) {
+      log.error("Error parsing arguments: {}", args, ex);
+      ex.usage();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
-  public void process()
-      throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
-          IllegalAccessException {
-
-    FileFormatter fileFormatter = new FileFormatter();
-
-    if (arguments.isBeers()) {
-      fileFormatter.addBeer();
+  protected static FakeDataGenerator assignInstance(final FakeDataGenerator instance) {
+    if (INSTANCE == null) {
+      INSTANCE = instance;
     }
-    if (arguments.isBooks()) {
-      fileFormatter.addBook();
-    }
-    if (arguments.isCat()) {
-      fileFormatter.addCat();
-    }
-    if (arguments.isDog()) {
-      fileFormatter.addDog();
-    }
-    if (arguments.isFinance()) {
-      fileFormatter.addFinance();
-    }
+    return INSTANCE;
+  }
 
-    fileFormatter.build();
-    final CellProcessor[] cellProcessor =
-        fileFormatter.getCellProcessors().toArray(new CellProcessor[0]);
-    final String[] header = fileFormatter.getHeaders().toArray(new String[0]);
+  public void run() throws IOException {
+    log.info("Started application");
 
-    log.info("Column names are:\n{}", Strings.join("|", header));
+    Long minSizeLimit = Long.valueOf(defaultArgs.getSizeMiBiBytes()) * 1024 * 1024;
 
-    Long minSizeLimit = Long.valueOf(arguments.getSizeGiBiBytes()) * 1024 * 1024 * 1024;
-    String minSizeLimitHuman = FileUtils.byteCountToDisplaySize(minSizeLimit).toString();
+    DataCollector dataCollector = new DefaultCollector();
+    DefaultPipeline dataPipeline = new DefaultPipeline();
+    dataPipeline.setDataCollector(dataCollector);
 
-    for (int i = 0; i < arguments.getAmountFiles(); i++) {
-      Long fileSizeCounter = Long.valueOf(0);
+    ExecutorService executor = Executors.newCachedThreadPool();
 
-      String filePath = getTargetFileName().toFile().toString();
-      log.info("Writing data to file: {}", filePath);
+    fakersRelatedArgs
+        .getFakers()
+        .forEach(
+            new Consumer<AvailableFakers>() {
+              @SneakyThrows
+              @Override
+              public void accept(AvailableFakers faker) {
+                dataCollector.appendSource(faker.instantiate(executor));
+              }
+            });
 
-      CsvListWriter targetFileWriter =
-          new CsvListWriter(new FileWriter(filePath), CsvPreference.STANDARD_PREFERENCE);
-      targetFileWriter.writeHeader(header);
+    List<String> headers = ((RecordDescriptor) dataCollector).retrieveHeaders();
 
-      fileSizeCounter += Long.valueOf(Strings.join(",", header).length());
+    for (int i = 0; i < defaultArgs.getAmountFiles(); i++) {
+      HashSet<DataWriter> dataWriters = new HashSet<DataWriter>();
 
-      try (ProgressBar pb2 =
+      String uuid = UUID.randomUUID().toString();
+
+      if (csvRelatedArgs.isCsvOutput()) {
+        Path fullName = Paths.get(defaultArgs.getPath(), uuid + ".csv");
+        dataWriters.add(new CsvFileTargetWriter(fullName, headers));
+
+        log.info("Record column headers: {}", Strings.join(", ", headers));
+      }
+
+      if (parquetRelatedArgs.isParquetOutput()) {
+        Path fullName = Paths.get(defaultArgs.getPath(), uuid + ".parquet");
+        dataWriters.add(new ParquetFileTargetWriter(fullName, headers));
+      }
+
+      dataPipeline.setDataWriters(dataWriters);
+      Long fileSizeCounter = 0L;
+
+      try (ProgressBar pb =
           new ProgressBarBuilder()
               .setStyle(ProgressBarStyle.COLORFUL_UNICODE_BLOCK)
-              .setUnit(getPbUnitName(), getPbUnitSize())
               .setInitialMax(minSizeLimit)
+              .setUnit(getPbUnitName(defaultArgs), getPbUnitSize(defaultArgs))
               .setTaskName("Fake data generation")
               .showSpeed()
               .build()) {
         while (fileSizeCounter.compareTo(minSizeLimit) < 0) {
-          List<String> currentLine = fileFormatter.produceData();
-          targetFileWriter.write(currentLine, cellProcessor);
+          Integer recordLength = dataPipeline.pumpUp();
+          fileSizeCounter += recordLength;
 
-          fileSizeCounter += Long.valueOf(Strings.join(",", currentLine).length());
-          pb2.stepTo(fileSizeCounter);
+          pb.stepBy(recordLength);
         }
       }
 
-      targetFileWriter.close();
-      log.info("Closed file: {}", filePath);
+      dataWriters.forEach(
+          dataWriter -> {
+            try {
+              dataWriter.close();
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          });
     }
+
+    executor.shutdown();
+    log.info("Exiting application...");
   }
 
-  private Path getTargetFileName() {
-    String basename =
-        new StringBuilder().append(UUID.randomUUID().toString()).append(".csv").toString();
-    Path path = Paths.get(arguments.getPath(), basename);
-    return path;
-  }
-
-  private String getPbUnitName() {
-    if (arguments.getSizeGiBiBytes() < 10) {
+  private String getPbUnitName(final DefaultArgs arguments) {
+    if (arguments.getSizeMiBiBytes() < 10) {
+      return "Bytes";
+    }
+    if (arguments.getSizeMiBiBytes() < 100) {
       return "KiBytes";
     }
-    if (arguments.getSizeGiBiBytes() < 100) {
-      return "MiBytes";
-    }
-    return "GiBytes";
+    return "MiBytes";
   }
 
-  private Long getPbUnitSize() {
-    if (arguments.getSizeGiBiBytes() < 10) {
-      return Long.valueOf(1024);
+  private Long getPbUnitSize(final DefaultArgs arguments) {
+    if (arguments.getSizeMiBiBytes() < 10) {
+      return 1L;
     }
-    if (arguments.getSizeGiBiBytes() < 100) {
-      return Long.valueOf(1024 * 1024);
+    if (arguments.getSizeMiBiBytes() < 100) {
+      return (long) (1024);
     }
-    return Long.valueOf(1024 * 1024 * 1024);
+    return (long) (1024 * 1024);
   }
 }
