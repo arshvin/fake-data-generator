@@ -45,14 +45,15 @@ public class FakeDataGenerator {
 
     final JCommander jc =
         JCommander.newBuilder()
-                .addObject(defaultArgs)
-                .addObject(fakersRelatedArgs)
-                .addObject(csvRelatedArgs)
-                .addObject(parquetRelatedArgs)
-                .programName("fake-data-generator").build();
+            .addObject(defaultArgs)
+            .addObject(fakersRelatedArgs)
+            .addObject(csvRelatedArgs)
+            .addObject(parquetRelatedArgs)
+            .programName("fake-data-generator")
+            .build();
 
     try {
-      commander.parse(args);
+      jc.parse(args);
 
       if (defaultArgs.isHelp()) {
         jc.usage();
