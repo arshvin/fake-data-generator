@@ -1,23 +1,23 @@
-package preved.medved.producers;
+package preved.medved.depricated.fileWriter;
 
 import com.github.javafaker.Beer;
 import com.github.javafaker.Faker;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.BackgroundFetcher;
+import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
-public class BeerFaker extends BackgroundFetcher implements Producer, Header {
-  private Beer beer;
+public class BeerFaker extends BackgroundFetcher {
+  private final Beer beer;
 
   public BeerFaker(Faker faker) {
+    header = new String[] {"beer.name", "beer.style", "beer.hop", "beer.yeast", "beer.malt"};
     beer = faker.beer();
 
     fetchTask =
         () -> {
-          log.trace("Generating data from Runnable task");
+          log.debug("Generating data from Runnable task");
           queue.add(
               Arrays.asList(beer.name(), beer.style(), beer.hop(), beer.yeast(), beer.malt()));
         };
@@ -27,15 +27,5 @@ public class BeerFaker extends BackgroundFetcher implements Producer, Header {
             (int i) -> {
               requestNewData();
             });
-  }
-
-  @Override
-  public List<String> getHeader() {
-    return Arrays.asList("beer.name", "beer.style", "beer.hop", "beer.yeast", "beer.malt");
-  }
-
-  @Override
-  public void close() {
-    shutdown();
   }
 }

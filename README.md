@@ -7,4 +7,3 @@ Maven project generated with `com.a9ski:quick-start` archetype.
 2. Activate this environment by `source .venv/bin/activate`
 3. Install [pre-commit](https://pre-commit.com/) tool with help of command `pip install pre-commit`.
 4. Install the PR-commit hook by executing `pre-commit install` inside project directory.
-5. Run against all files in the project: `pre-commit run --all-files`.

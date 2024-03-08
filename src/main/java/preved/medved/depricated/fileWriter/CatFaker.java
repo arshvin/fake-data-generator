@@ -1,23 +1,23 @@
-package preved.medved.producers;
+package preved.medved.depricated.fileWriter;
 
 import com.github.javafaker.Cat;
 import com.github.javafaker.Faker;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.BackgroundFetcher;
+import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
-public class CatFaker extends BackgroundFetcher implements Producer, Header {
-  private Cat cat;
+public class CatFaker extends BackgroundFetcher {
+  private final Cat cat;
 
   public CatFaker(Faker faker) {
+    header = new String[] {"cat.name", "cat.breed", "cat.registry"};
     cat = faker.cat();
 
     fetchTask =
         () -> {
-          log.trace("Generating data from Runnable task");
+          log.debug("Generating data from Runnable task");
           queue.add(Arrays.asList(cat.name(), cat.breed(), cat.registry()));
         };
 
@@ -26,15 +26,5 @@ public class CatFaker extends BackgroundFetcher implements Producer, Header {
             (int i) -> {
               requestNewData();
             });
-  }
-
-  @Override
-  public List<String> getHeader() {
-    return Arrays.asList("cat.name", "cat.breed", "cat.registry");
-  }
-
-  @Override
-  public void close() {
-    shutdown();
   }
 }

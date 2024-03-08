@@ -1,4 +1,4 @@
-package preved.medved.csv;
+package preved.medved.depricated.csv;
 
 import com.beust.jcommander.Strings;
 import com.github.javafaker.Faker;
@@ -11,29 +11,29 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.supercsv.cellprocessor.constraint.NotNull;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import preved.medved.producers.BeerFaker;
-import preved.medved.producers.BookFaker;
-import preved.medved.producers.CatFaker;
-import preved.medved.producers.DogFaker;
-import preved.medved.producers.FinanceFaker;
-import preved.medved.producers.Header;
-import preved.medved.producers.Producer;
+import preved.medved.depricated.fileWriter.BeerFaker;
+import preved.medved.depricated.fileWriter.BookFaker;
+import preved.medved.depricated.fileWriter.CatFaker;
+import preved.medved.depricated.fileWriter.DogFaker;
+import preved.medved.depricated.fileWriter.FinanceFaker;
+import preved.medved.depricated.fileWriter.Header;
+import preved.medved.depricated.fileWriter.Producer;
 
 @Log4j2
 public class FileFormatter {
 
-  private LinkedHashMap<Class<Producer>, Producer> fakerRegistry = new LinkedHashMap<>();
+  private final LinkedHashMap<Class<Producer>, Producer> fakerRegistry = new LinkedHashMap<>();
 
-  @Getter private ArrayList<String> headers = new ArrayList<>();
+  @Getter private final ArrayList<String> headers = new ArrayList<>();
 
-  @Getter private ArrayList<CellProcessor> cellProcessors = new ArrayList<>();
-  private Faker fakerInstance = new Faker();
+  @Getter private final ArrayList<CellProcessor> cellProcessors = new ArrayList<>();
+  private final Faker fakerInstance = new Faker();
 
   private void addFaker(Class faker)
       throws NoSuchMethodException, SecurityException, InstantiationException,
           IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-    if (!fakerRegistry.keySet().contains(faker)) {
+    if (!fakerRegistry.containsKey(faker)) {
       Class[] parameterType = {Faker.class};
       Constructor<Producer> constructor = faker.getConstructor(parameterType);
       Object[] obj = {fakerInstance};
@@ -109,5 +109,4 @@ public class FileFormatter {
   public void close() {
     fakerRegistry.values().forEach((Producer item) -> item.close());
   }
-  ;
 }

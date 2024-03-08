@@ -1,23 +1,23 @@
-package preved.medved.producers;
+package preved.medved.depricated.fileWriter;
 
 import com.github.javafaker.Faker;
 import com.github.javafaker.Finance;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
 import lombok.extern.log4j.Log4j2;
-import preved.medved.BackgroundFetcher;
+import preved.medved.depricated.BackgroundFetcher;
 
 @Log4j2
-public class FinanceFaker extends BackgroundFetcher implements Producer, Header {
-  private Finance finance;
+public class FinanceFaker extends BackgroundFetcher {
+  private final Finance finance;
 
   public FinanceFaker(Faker faker) {
+    header = new String[] {"finance.bic", "finance.creaditCard", "finance.iban"};
     finance = faker.finance();
 
     fetchTask =
         () -> {
-          log.trace("Generating data from Runnable task");
+          log.debug("Generating data from Runnable task");
           queue.add(Arrays.asList(finance.bic(), finance.creditCard(), finance.iban()));
         };
 
@@ -26,15 +26,5 @@ public class FinanceFaker extends BackgroundFetcher implements Producer, Header 
             (int i) -> {
               requestNewData();
             });
-  }
-
-  @Override
-  public List<String> getHeader() {
-    return Arrays.asList("finance.bic", "finance.creaditCard", "finance.iban");
-  }
-
-  @Override
-  public void close() {
-    shutdown();
   }
 }
