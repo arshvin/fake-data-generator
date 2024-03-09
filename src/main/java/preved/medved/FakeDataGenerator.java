@@ -19,6 +19,7 @@ import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
 import preved.medved.cli.CsvRelatedArgs;
 import preved.medved.cli.DefaultArgs;
+import preved.medved.cli.DefaultArgsProvider;
 import preved.medved.cli.FakersRelatedArgs;
 import preved.medved.cli.ParquetRelatedArgs;
 import preved.medved.generator.pipelines.DefaultPipeline;
@@ -48,6 +49,7 @@ public class FakeDataGenerator {
             .addObject(fakersRelatedArgs)
             .addObject(csvRelatedArgs)
             .addObject(parquetRelatedArgs)
+            .defaultProvider(new DefaultArgsProvider())
             .programName("fake-data-generator")
             .build();
 
@@ -85,8 +87,21 @@ public class FakeDataGenerator {
     DefaultPipeline dataPipeline = new DefaultPipeline();
     dataPipeline.setDataCollector(dataCollector);
 
-    ExecutorService executor = Executors.newCachedThreadPool();
+    ExecutorService executor = null;
 
+    switch (defaultArgs.getThreadPoolType()) {
+      case CachedThread:
+        executor = Executors.newCachedThreadPool();
+        break;
+      case WorkStealing:
+        executor = Executors.newWorkStealingPool();
+        break;
+      case SingleThread:
+        executor = Executors.newSingleThreadExecutor();
+        break;
+    }
+
+    ExecutorService finalExecutor = executor;
     fakersRelatedArgs
         .getFakers()
         .forEach(
@@ -94,7 +109,7 @@ public class FakeDataGenerator {
               @SneakyThrows
               @Override
               public void accept(AvailableFakers faker) {
-                dataCollector.appendSource(faker.instantiate(executor));
+                dataCollector.appendSource(faker.instantiate(finalExecutor));
               }
             });
 
@@ -146,7 +161,7 @@ public class FakeDataGenerator {
           });
     }
 
-    executor.shutdown();
+    finalExecutor.shutdown();
     log.info("Exiting application...");
   }
 

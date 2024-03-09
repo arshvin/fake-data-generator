@@ -17,25 +17,25 @@ In order to figure out how to reach out, or, at least, to approach to the best p
 * OS: macOS 14.3.1 (23D60)
 * Java: OpenJDK Runtime Environment Zulu21.32+17-CA (build 21.0.2+13-LTS)
 
-Just for simplicity, amount of data to generate has been chosen: 1 file of 100MiB. I.e. args `--file-size | -s` and `--amount-files | -n` were specified to **100** and **1** respectively. Also, different types of thread pools were chosen inside the code, and the tests were run. The results are presented below:
+Just for simplicity, amount of data to generate has been chosen to 1 file of 100MiB, i.e. args `--file-size | -s` and `--amount-files | -n` were specified to **100** and **1** respectively. Also, different types of thread pools were specified through arg `--thread-pool-type`. The results are presented below:
 
-| Thread Pool<br/>Name          | List of fakers<br/>(--fakers arg) | Amount of threads <br/>for getting data | Elapsed time |
-|:------------------------------|:----------------------------------|:---------------------------------------:|:------------:|
-| CachedThreadPool              | book,cat,beer,finance,dog         | sum from each of used fakers(see below) |   0:01:16    |
-| WorkStealingPool              | book,cat,beer,finance,dog         | sum from each of used fakers(see below) |   0:01:02    |
-| SingleThreadScheduledExecutor | book,cat,beer,finance,dog         | sum from each of used fakers(see below) |   0:04:28    |
-| CachedThreadPool              | book                              |                    2                    |   0:00:23    |
-| WorkStealingPool              | book                              |                    2                    |   0:00:31    |
-| SingleThreadScheduledExecutor | book                              |                    2                    |   0:00:43    |
-| CachedThreadPool              | cat                               |                    1                    |   0:00:12    |
-| WorkStealingPool              | cat                               |                    1                    |   0:00:09    |
-| SingleThreadScheduledExecutor | cat                               |                    1                    |   0:00:12    |
-| CachedThreadPool              | beer                              |                    1                    |   0:00:10    |
-| WorkStealingPool              | beer                              |                    1                    |   0:00:08    |
-| SingleThreadScheduledExecutor | beer                              |                    1                    |   0:00:12    |
-| CachedThreadPool              | finance                           |                    3                    |   0:07:03    |
-| WorkStealingPool              | finance                           |                    3                    |   0:07:48    |
-| SingleThreadScheduledExecutor | finance                           |                    3                    |   0:25:10    |
-| CachedThreadPool              | dog                               |                    2                    |   0:00:28    |
-| WorkStealingPool              | dog                               |                    2                    |   0:00:17    |
-| SingleThreadScheduledExecutor | dog                               |                    2                    |   0:00:22    |
+| Thread Pool Name<br/>(--thread-pool-type) | List of fakers<br/>(--fakers arg) | Amount of threads <br/>for getting data | Elapsed time |
+|:------------------------------------------|:----------------------------------|:---------------------------------------:|:------------:|
+| CachedThread                              | book,cat,beer,finance,dog         | sum from each of used fakers(see below) |   0:01:16    |
+| WorkStealing                              | book,cat,beer,finance,dog         | sum from each of used fakers(see below) |   0:01:02    |
+| SingleThread                              | book,cat,beer,finance,dog         | sum from each of used fakers(see below) |   0:04:28    |
+| CachedThread                              | book                              |                    2                    |   0:00:23    |
+| WorkStealing                              | book                              |                    2                    |   0:00:31    |
+| SingleThread                              | book                              |                    2                    |   0:00:43    |
+| CachedThread                              | cat                               |                    1                    |   0:00:12    |
+| WorkStealing                              | cat                               |                    1                    |   0:00:09    |
+| SingleThread                              | cat                               |                    1                    |   0:00:12    |
+| CachedThread                              | beer                              |                    1                    |   0:00:10    |
+| WorkStealing                              | beer                              |                    1                    |   0:00:08    |
+| SingleThread                              | beer                              |                    1                    |   0:00:12    |
+| CachedThread                              | finance                           |                    3                    |   0:07:03    |
+| WorkStealing                              | finance                           |                    3                    |   0:07:48    |
+| SingleThread                              | finance                           |                    3                    |   0:25:10    |
+| CachedThread                              | dog                               |                    2                    |   0:00:28    |
+| WorkStealing                              | dog                               |                    2                    |   0:00:17    |
+| SingleThread                              | dog                               |                    2                    |   0:00:22    |
