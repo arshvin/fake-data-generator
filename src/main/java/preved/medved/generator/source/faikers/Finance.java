@@ -1,10 +1,9 @@
 package preved.medved.generator.source.faikers;
 
 import com.github.javafaker.Faker;
-import lombok.extern.log4j.Log4j2;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class Finance extends AbstractDataProducer {

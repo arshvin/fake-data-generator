@@ -1,16 +1,15 @@
 package preved.medved.generator.source.faikers;
 
-import lombok.SneakyThrows;
-import org.apache.logging.log4j.Logger;
-import preved.medved.generator.source.DataProducer;
-import preved.medved.generator.source.RecordDescriptor;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import lombok.SneakyThrows;
+import org.apache.logging.log4j.Logger;
+import preved.medved.generator.source.DataProducer;
+import preved.medved.generator.source.RecordDescriptor;
 
 public class AbstractDataProducer implements DataProducer, RecordDescriptor {
   private final Logger log;
@@ -45,7 +44,8 @@ public class AbstractDataProducer implements DataProducer, RecordDescriptor {
       Instant before = Instant.now();
       final String[] faikerTaskResult = taskResult.get();
       Instant after = Instant.now();
-      log.debug("Result retrieved during {} milliseconds", Duration.between(before,after).toMillis());
+      log.debug(
+          "Result retrieved during {} milliseconds", Duration.between(before, after).toMillis());
 
       for (int j = 0; j < faikerTaskResult.length; j++) {
         result.add(faikerTaskResult[j]);

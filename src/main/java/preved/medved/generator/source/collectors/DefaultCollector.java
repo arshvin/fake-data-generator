@@ -1,14 +1,13 @@
 package preved.medved.generator.source.collectors;
 
-import lombok.extern.log4j.Log4j2;
-import preved.medved.generator.source.DataCollector;
-import preved.medved.generator.source.DataProducer;
-import preved.medved.generator.source.RecordDescriptor;
-
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import lombok.extern.log4j.Log4j2;
+import preved.medved.generator.source.DataCollector;
+import preved.medved.generator.source.DataProducer;
+import preved.medved.generator.source.RecordDescriptor;
 
 @Log4j2
 public class DefaultCollector implements DataCollector, RecordDescriptor {
@@ -32,7 +31,7 @@ public class DefaultCollector implements DataCollector, RecordDescriptor {
     this.dataProducers.add(dataProducer);
   }
 
-    @Override
+  @Override
   public List<String> retrieveHeaders() {
     log.debug("Requesting of records header");
     return dataProducers.stream()

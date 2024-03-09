@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true)
 public class ParquetRelatedArgs {
-    @Parameter(names = "--parquet", description = "Parquet format will be used as output", order = 5)
-    private boolean parquetOutput;
+  @Parameter(names = "--parquet", description = "Parquet format will be used as output", order = 5)
+  private boolean parquetOutput;
 }

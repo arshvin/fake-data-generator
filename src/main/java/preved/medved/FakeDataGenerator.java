@@ -3,6 +3,15 @@ package preved.medved;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Strings;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import me.tongfei.progressbar.ProgressBar;
@@ -16,20 +25,10 @@ import preved.medved.generator.pipelines.DefaultPipeline;
 import preved.medved.generator.sink.CsvFileTargetWriter;
 import preved.medved.generator.sink.DataWriter;
 import preved.medved.generator.sink.ParquetFileTargetWriter;
-import preved.medved.generator.source.DataCollector;
 import preved.medved.generator.source.AvailableFakers;
-import preved.medved.generator.source.collectors.DefaultCollector;
+import preved.medved.generator.source.DataCollector;
 import preved.medved.generator.source.RecordDescriptor;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
+import preved.medved.generator.source.collectors.DefaultCollector;
 
 /** Application main class. */
 @Log4j2

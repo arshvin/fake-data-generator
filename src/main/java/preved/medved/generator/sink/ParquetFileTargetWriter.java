@@ -1,5 +1,9 @@
 package preved.medved.generator.sink;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -8,12 +12,6 @@ import org.apache.parquet.avro.AvroParquetWriter;
 import org.apache.parquet.hadoop.ParquetWriter;
 import org.apache.parquet.hadoop.metadata.CompressionCodecName;
 import org.codehaus.jackson.map.ObjectMapper;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Log4j2
 public class ParquetFileTargetWriter implements DataWriter {

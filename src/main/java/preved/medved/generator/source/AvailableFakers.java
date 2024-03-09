@@ -1,11 +1,10 @@
 package preved.medved.generator.source;
 
-import lombok.extern.log4j.Log4j2;
-import preved.medved.generator.source.faikers.*;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
+import lombok.extern.log4j.Log4j2;
+import preved.medved.generator.source.faikers.*;
 
 @Log4j2
 public enum AvailableFakers {
@@ -45,7 +44,9 @@ public enum AvailableFakers {
   }
 
   public DataProducer instantiate(ExecutorService executor)
-      throws NoSuchMethodException, InvocationTargetException, InstantiationException,
+      throws NoSuchMethodException,
+          InvocationTargetException,
+          InstantiationException,
           IllegalAccessException {
     Class faker = this.getClazz();
     Class[] parameters = {ExecutorService.class};

@@ -1,13 +1,12 @@
 package preved.medved.generator.sink;
 
 import com.beust.jcommander.Strings;
-import lombok.extern.log4j.Log4j2;
-import org.supercsv.io.CsvListWriter;
-import org.supercsv.prefs.CsvPreference;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
+import org.supercsv.io.CsvListWriter;
+import org.supercsv.prefs.CsvPreference;
 
 @Log4j2
 public class CsvFileTargetWriter implements DataWriter {

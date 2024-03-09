@@ -4,14 +4,9 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import lombok.Builder;
 import lombok.Data;
-import preved.medved.cli.converters.InputNameToClassMapper;
-import preved.medved.cli.splitters.FakerListSplitter;
 import preved.medved.cli.validators.DataVolumeToGenerate;
 import preved.medved.cli.validators.FakerInputList;
 import preved.medved.cli.validators.OutputDataFormats;
-import preved.medved.generator.source.AvailableFakers;
-
-import java.util.List;
 
 /** Command line arguments passed to the application. */
 @Builder(toBuilder = true)

@@ -1,11 +1,9 @@
 package preved.medved.generator.source.faikers;
 
 import com.github.javafaker.Faker;
-import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Logger;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class Cat extends AbstractDataProducer {
