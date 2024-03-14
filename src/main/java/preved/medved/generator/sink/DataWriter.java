@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface DataWriter {
-    void writeRecord(List<String> data) throws IOException;
-    void close() throws IOException;
+  void writeRecord(List<String> data) throws IOException;
+
+  void close() throws IOException;
 }

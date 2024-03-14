@@ -1,46 +1,46 @@
 package preved.medved.cli;
 
 import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 import lombok.Builder;
 import lombok.Data;
+import preved.medved.cli.converters.InputNameToThreadPool;
+import preved.medved.cli.validators.DataVolumeToGenerate;
+import preved.medved.cli.validators.FakerInputList;
+import preved.medved.cli.validators.OutputDataFormats;
+import preved.medved.generator.ThreadPoolTypes;
 
 /** Command line arguments passed to the application. */
 @Builder(toBuilder = true)
 @Data
+@Parameters(
+    parametersValidators = {
+      OutputDataFormats.class,
+      FakerInputList.class,
+      DataVolumeToGenerate.class
+    })
 public class DefaultArgs {
   @Parameter(
       names = {"--destination-folder", "-p"},
-      description = "Where put the files")
-  private String path = ".";
-
-  @Parameter(
-      names = {"--amount-files", "-n"},
-      description = "Amount of data files for generating")
-  private Integer amountFiles = 1;
+      description = "Where to put of generated files",
+      order = 1)
+  private String path;
 
   @Parameter(
       names = {"--file-size", "-s"},
-      description = "Minimum size of data file for generating (in GiB)")
-  private Integer sizeGiBiBytes = 1;
+      description = "Minimum size of data file for generating (in MiB). Default: 10",
+      order = 2)
+  private Integer sizeMiBiBytes;
 
-  @Parameter(names = "--book-faker", description = "Book faker will be used")
-  private boolean books;
+  @Parameter(
+      names = {"--amount-files", "-n"},
+      description = "Amount of data files for generating. Default: 1",
+      order = 3)
+  private Integer amountFiles;
 
-  @Parameter(names = "--beer-faker", description = "Beer faker will be used")
-  private boolean beers;
+  @Parameter(names = "--help", description = "Shows this help message", help = true)
+  private boolean help;
 
-  @Parameter(names = "--cat-faker", description = "Cat faker will be used")
-  private boolean cat;
-
-  @Parameter(names = "--dog-faker", description = "Dog faker will be used")
-  private boolean dog;
-
-  @Parameter(names = "--finance-faker", description = "Finance faker will be used")
-  private boolean finance;
-
-  @Parameter(names = "--csv", description = "CSV format will be used as output")
-  private boolean csvOutput;
-
-  @Parameter(names = "--parquet", description = "Parquet format will be used as output")
-  private boolean parquetOutput;
+  @Parameter(names = "--thread-pool-type", hidden = true, converter = InputNameToThreadPool.class)
+  private ThreadPoolTypes threadPoolType;
 }
