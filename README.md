@@ -1,4 +1,4 @@
-# Fake data generator tool
+# Fake data generator
 This tool is intended for generating fake data or test data, with help of [Faker](https://github.com/DiUS/java-faker)
 java library, and storing this data to CSV or Parquet files. Currently, only few list of faker are used in the
 application, which are listed inside the [AvailableFakers](./src/main/java/preved/medved/generator/source/AvailableFakers.java)
