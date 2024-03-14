@@ -30,13 +30,13 @@ public class DefaultArgs {
       names = {"--file-size", "-s"},
       description = "Minimum size of data file for generating (in MiB). Default: 10",
       order = 2)
-  private int sizeMiBiBytes = 10; //
+  private Integer sizeMiBiBytes;
 
   @Parameter(
       names = {"--amount-files", "-n"},
       description = "Amount of data files for generating. Default: 1",
       order = 3)
-  private int amountFiles = 1;
+  private Integer amountFiles;
 
   @Parameter(names = "--help", description = "Shows this help message", help = true)
   private boolean help;
