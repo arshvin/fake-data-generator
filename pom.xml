@@ -35,9 +35,7 @@
         <log4j2.version>2.17.2</log4j2.version>
         <faker.version>1.0.2</faker.version>
         <jcommander.version>1.83</jcommander.version>
-<!--        <guava.version>31.1-jre</guava.version>-->
         <supercsv.version>2.4.0</supercsv.version>
-<!--        <common.io.version>2.11.0</common.io.version>-->
         <apache.parquet.version>1.13.0</apache.parquet.version>
         <progress.bar.version>0.9.3</progress.bar.version>
         <jackson.version>2.16.0</jackson.version>
@@ -64,13 +62,6 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
-
-<!--        &lt;!&ndash; Google guava &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.google.guava</groupId>-->
-<!--            <artifactId>guava</artifactId>-->
-<!--            <version>${guava.version}</version>-->
-<!--        </dependency>-->
 
         <!-- CLI command line parsing -->
         <dependency>
@@ -110,35 +101,12 @@
             <artifactId>super-csv</artifactId>
             <version>${supercsv.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>commons-io</groupId>-->
-<!--            <artifactId>commons-io</artifactId>-->
-<!--            <version>${common.io.version}</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>me.tongfei</groupId>
             <artifactId>progressbar</artifactId>
             <version>${progress.bar.version}</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.parquet</groupId>-->
-<!--            <artifactId>parquet-common</artifactId>-->
-<!--            <version>${apache.parquet.version}</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.parquet</groupId>-->
-<!--            <artifactId>parquet-encoding</artifactId>-->
-<!--            <version>${apache.parquet.version}</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.parquet</groupId>-->
-<!--            <artifactId>parquet-column</artifactId>-->
-<!--            <version>${apache.parquet.version}</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache.parquet</groupId>

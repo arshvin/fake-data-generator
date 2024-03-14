@@ -5,24 +5,24 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
-        <RollingFile name="File"
-                     fileName="application.log"
-                     filePattern="application.%d{yyyy-MM-dd.HH'h'}.%i.log.gz"
-                     ignoreExceptions="false">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-            <Policies>
-                <OnStartupTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="300MB"/>
-                <TimeBasedTriggeringPolicy interval="1" />
-            </Policies>
-            <DefaultRolloverStrategy max="5"/>
-        </RollingFile>
+<!--        <RollingFile name="File"-->
+<!--                     fileName="application.log"-->
+<!--                     filePattern="application.%d{yyyy-MM-dd.HH'h'}.%i.log.gz"-->
+<!--                     ignoreExceptions="false">-->
+<!--            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+<!--            <Policies>-->
+<!--                <OnStartupTriggeringPolicy />-->
+<!--                <SizeBasedTriggeringPolicy size="300MB"/>-->
+<!--                <TimeBasedTriggeringPolicy interval="1" />-->
+<!--            </Policies>-->
+<!--            <DefaultRolloverStrategy max="5"/>-->
+<!--        </RollingFile>-->
     </Appenders>
 
     <Loggers>
         <Root level="${env:LOG_LEVEL:-INFO}">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+<!--            <AppenderRef ref="File"/>-->
         </Root>
     </Loggers>
 </Configuration>
